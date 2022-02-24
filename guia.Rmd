@@ -1,0 +1,328 @@
+---
+title: "Guia para el curso interno de R: Nivel 1"
+output:
+  pdf_document: 
+      fig_caption: true
+      number_sections: true
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\renewcommand{\figurename}{Fig.}
+
+# Introducción a R para manejo de bases de datos y operaciones geográficas {.unlisted .unnumbered}
+
+R es un lenguaje distribuído gratuitamente para realizar estadística y análisis 
+computacional. Gracias a su penetración y su componente de código abierto, hoy 
+podemos utilizarlo para realizar análisis geoespaciales utilizados en el estudio
+del transporte.
+
+
+# Objetivos {.unlisted .unnumbered}
+Adquirir nociones básicas de manejo de software de programación con lenguaje R, para 
+el manejo de bases de datos, análisis estadísticos y visualizaciones, para entender y
+formular modelos de movilidad y transporte.
+
+Complementar el conocimiento y fomentar el uso de herramientas especializadas que permitan
+a los colaboradores desarrollar e implementar procesos y metodologías eficientes, 
+reproducibles y mantener un mejor control de los mismos. 
+
+# Contenido del curso {.unlisted .unnumbered}
+
+| Sesión | Temas    | Contenido                                              |
+|--------|----------|--------------------------------------------------------|
+| 1      | 1, 2 y 3 | Instalación, introducción y objetos                    |
+| 2      | 4        | Funciones intermedias                                  |
+| 3      | 5        | Tidyverse                                              |
+| 4      | 6        | Importación y Union de datos                           |
+| 5      | 7        | Visualización de datos                                 |
+| 8      | 8        | Limpíeza de datos                                      |
+| 8      | 9        | Análisis Exploratorio de datos (EDA)                   |
+| 9      | 10       | Estadística en R                                       |
+| 10     | 11.1     | Modelos de regresion                                   |
+| 11     | 11.2     | Modelos de regresion                                   |
+| 12     | 12.1     | Análisis espacial: visualización y analisis            |
+| 13     | 12.2     | Análisis espacial: estadística y mapas interactivos    |
+| 14     | 13.1     | Geocomputacion: introducción y zonificacion            |
+| 15     | 13.2     | Geocomputacion: lineas de deseo y operaciones de ruteo |
+
+\newpage
+
+# ¿Cómo usar este documento? {.unlisted .unnumbered}
+
+
+
+\newpage
+\renewcommand{\contentsname}{Temario}
+\tableofcontents 
+\newpage
+
+# Instalación (10 min)
+R es un lenguaje distribuído gratuitamente para realizar estadística y análisis 
+computacional. Gracias a su penetración y su componente de código abierto, hoy 
+podemos utilizarlo para realizar análisis geoespaciales.
+
+Para su instalación y el mejor uso, tenemos que instalar el compilador, así como
+la interfaz de usuario más popular RStudio.  
+
+Compilador:  
+https://cran.r-project.org 
+
+RStudio  
+https://www.rstudio.com/products/rstudio/download/  
+
+# Introducción a R (20 min)
+En esta sección estudiamos los principios de R y su funcionamiento básico, como 
+se puede utilizar la consola como una calculadora y como asignar variables. 
+También veremos los principales tipos de variables o datos, sus usos y diversas
+formas de modificarlas.
+
+## La interfaz de RStudio
+RStudio es un Entorno de Desarrollo Integrado (IDE: Integrated Development Environment),
+es decir, la interfaz entre R y el usuario. Está diseñado para contener varias 
+herramientas simultaneas que un instancia de R no brinda por si sola.
+
+La interfaz se compone principalmente de 4 paneles, el panel de SOURCE (Fuente) o
+editor de script, la CONSOLA, el WORKSPACE y el panel auxiliar, donde encontramos
+los archivos, visualizaciones, lista de librerías o paquetes, y el panel de ayuda.
+Durante el curso veremos más a fondo el uso del panel auxiliar.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width = 12cm]{img/rstudio_session.png}\quad
+  \caption{Ventana típica de 4 paneles}
+\end{figure}
+
+* Source: Aquí escribimos el código
+* Workspace: En el workspace tenemos dos pestañas principales, "Environment" o 
+"Entorno" y "History" o "Historial" (pueden aparecer otras pestañas de acuerdo con
+su versión de R o sus sistema operativo).
+  * En la pestaña Environment aparecerán las variables que declaremos y los objetos 
+  que vayamos creando
+  * En la pestaña History veremos todas las instrucciones de programación que 
+  hemos corrido hasta el momento
+* Consola: En la consola vemos además de las instrucciones de programación, 
+los errores y advertencias (warnings) que resultan de correr un código. Además,
+podemos utilizar la consola para correr código que no necesitamos mantener en 
+el flujo de trabajo, como la instalación de librerías, consultar los archivos de 
+ayuda o realizar operaciones simples.
+
+## Librerías, instalación y carga
+El primer paso para trabajar en R, es el entendimiento de la estructura del lenguaje.
+El lenguaje R consiste en una serie de funciones y comandos que permiten el 
+análisis de diversos tipos de datos. Estas funciones se agrupan en librerías o 
+paquetes (packages), que se desarrollan para resolver casos específicos, por 
+ejemplo, importar y exportar datos de excel con "openxlsx", manejar y transformar
+datos con "dplyr", realizar gráficas y visualizaciones con "ggplot2" o trabajar
+con datos georeferenciados y archivos geoespaciales con "sf".
+
+La versión base de R no contiene estás librerías, por lo que hay que 
+"instalarlas" dentro del sistema y cargarlas cada vez que se utilicen. Esto se 
+puede hacer dentro del código con el comando "install.packages()" o dentro de
+la pestaña Packages.
+
+```{r eval = FALSE}
+install.packages("ggplot2")
+install.packages("dplyr")
+```
+
+Las librerías instaladas se mantienen en el sistema, sin embargo, para hacer más
+eficiente el trabajo para cada proyecto, es necesario cargarlas en cada caso.
+El inicio de un script nuevo generalmente se verá como sigue:
+
+```{r eval = FALSE}
+
+install.packages(c("ggplot2", "dplyr", "tidyverse"))
+
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+
+```
+
+Es importante notar que es posible correr la función "install.packages()" para 
+varias librerías a la vez, lo que ahorra líneas de código y tiempo. La función
+"c()" significa "concatenar", y veremos más adelante que se utiliza para crear
+vectores de datos. También es posible ahorrar tiempo de ejecución omitiendo el 
+paso de instalación, recordando que las librerías solo deben instalarse 
+una vez en cada sistema.
+
+Finalmente, la versión base de R contiene varias funciones útiles con las que es
+posible hacer diversos cálculos y análisis, incluso importar y exportar archivos
+y generar gráficas. Como es de esperar, estas funciones base tienen limitantes 
+pero son útiles para primeros acercamientos a una serie de datos nueva, sin 
+necesidad de saturar el script. Así mismo, es recomendable solamente cargar las 
+librerías en uso, para evitar saturaciones de memoria y mantener el código lo 
+más limpio y amigable posible para otros usuarios.
+
+## Aritmética básica
+Las principales funciones base de R, son los operadores matemáticos. Nosotros
+entendemos el símbolo de "+" como la suma de dos números, sin embargo, dentro del
+lenguaje de programación, la computadora tiene que asociar este símbolo a una
+operación, por lo que también son llamados funciones. En resumen, para R es lo
+mismo 5+5 que sum(5, 5).
+
+Con esto, en su forma más básica, R es capaz de funcionar como una calculadora, 
+para esto, podemos utilizar la consola, si requerimos hacer cálculos rápidos, o
+agregar estas operaciones dentro del código. Por ejemplo, podemos calcular sumas, 
+restas, multiplicaciones, divisiones y potencias con los operadores conocidos:
+
+```{r}
+
+# Suma
+5 + 5 
+
+# Resta
+5 - 5 
+
+# Multiplicación
+3 * 5
+
+# División
+(5 + 5) / 2 
+
+# Potencia
+2^5
+
+```
+
+## Declaración de variables
+Las variables son un concepto básico en programación, nos permiten guardar valores
+(ej. 8) u objetos (ej. el vector c("ggplot2", "dplyr", "tidyverse")) en R, para
+después utilizar el nombre de la variable para acceder a su contenido y realizar
+operaciones sobre ella.
+
+Para asignar una variable, se utiliza la función "=" o la función "<-". Por 
+convención (y limpieza del código) la segunda se utiliza de manera generalizada
+y en solo en ciertos casos se utiliza el signo de "=" (por ejemplo, al asignar
+variables dentro de una función).
+
+Se pueden asignar variables de diferentes tipos y nombrarlas de casi cualquier 
+forma, de nuevo, la convención dice que es mejor colocar nombres descriptivos y
+separar las palabras con un punto o un guión bajo.
+
+```{r}
+# Buena práctica
+paquetes_lista <- c("ggplot2", "dplyr", "tidyverse")
+calificaciones_grupo_A <- c(8, 6, 7, 5, 10)
+
+# Mala práctica
+pkt = c("ggplot2", "dplyr", "tidyverse")
+calA = c(8, 6, 7, 5, 10)
+
+```
+
+Como se puede observar, las variables declaradas se añaden al entorno, y podemos
+acceder a ellas dando click, escribiendo su nombre en la consola o con la función
+"print()"
+
+```{r}
+print(paquetes_lista)
+```
+
+Una vez que tenemos la definición de variables, se pueden hacer operaciones con
+ellas, un ejemplo simple es si asignamos valores únicos a dos variables diferentes.
+
+```{r}
+manzanas <- 5
+peras <- 4
+
+manzanas + peras
+```
+
+El resultado también puede asignarse a otra variable, como sigue:
+
+```{r}
+frutas <- manzanas + peras
+print(frutas)
+```
+
+Pero no siempre podemos sumar peras con manzanas.
+
+## Tipos de variables
+En R, se trabaja con diversos tipos de variables, algunos de los tipos 
+fundamentales son:
+
+* Valores decimales como 8.8 se llaman **numerics** (numéricos)
+* Valores enteros como 8 se llaman **integers** (enteros)
+* Valores de verdadero o falso se llaman **logicals** (lógicos)
+* Registros de texto se llaman **characters** (caractéres)
+
+Como dijimos, no podemos sumar peras con manzanas
+
+```{r error = TRUE}
+manzanas <- 5
+peras <- "cuatro"
+manzanas + peras
+```
+
+El error indica que R no puede operar un valor numérico con un valor de texto, lo
+cual tiene sentido y nos ayuda a buscar alternativas dentro de nuestro
+código, por ejemplo, en una base de datos, los valores numéricos pueden ser 
+interpretados como texto, y podríamos estar cometiendo errores al no convertirlos
+primero.
+
+```{r error = TRUE}
+manzanas <- 5
+peras <- "4"
+manzanas + peras
+```
+
+Para conocer con que tipo de variable estamos trabajando, la versión base de R
+cuenta con la función "class()".
+
+```{r}
+class(manzanas)
+class(peras)
+```
+
+
+# Objetos (60 min)
+## Vectores
+## Matrices
+## Data Frames
+## Listas
+
+# Funciones intermedias (60 min)
+## Condicionales
+## Bucles (loops)
+## Funciones
+## Familia "apply"
+## Utilidades
+
+# Tidyverse (60 min)
+## Manejo de datos
+## Visualización
+## Agrupación y síntesis
+## Tipos de visualización
+
+# Union de datos (60 min)
+## Unión interna
+## Uniones izquierda y derecha
+## Otras uniones
+
+# Visualización de datos (90 min)
+## Gramática de los gráficos
+## Estéticas
+## Geometrías
+## Temas
+
+# Modelos de regresión (90 min)
+## Regresión lineal simple
+## Predicciones
+## Evaluación de modelos
+## Regresión logística simple
+
+# Análisis espacial (180 min)
+## Visualización de datos geoespaciales
+## Análisis espacial
+## Estadística espacial
+## Mapas interactivos con leaflet 
+
+# Geocomputación (180)
+## Introducción
+## Zonificación
+## Lineas de deseo
+## Operaciones de ruteo
