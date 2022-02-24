@@ -1,9 +1,3 @@
----
-output:
-  html_document:
-    fig_caption: yes
-    number_sections: no
----
 # Introducción a R para manejo de bases de datos y operaciones geográficas
 
 R es un lenguaje distribuído gratuitamente para realizar estadística y análisis 
