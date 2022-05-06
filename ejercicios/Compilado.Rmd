@@ -125,7 +125,7 @@ ggplot(DATA, aes(x=Modelo, y=Cantidad, fill=Clase)) +
 
 ### Otra del censo
 
-```{r}
+```{r censo2}
 censo <- read_csv("../data/censo.csv")
 
 censo_mx <- censo%>%
@@ -147,13 +147,7 @@ censo_mx_num <- sapply(censo_mx_datos,function(y)as.numeric(gsub("\\*","0",y)))%
   as.data.frame()
 censo_mx_num2 <- sapply(censo_mx_datos2,function(y)as.numeric(gsub("\\*","0",y)))%>%
   as.data.frame()
-
 censo_mx_bind2 <- cbind(censo_mx_id,censo_mx_id2,censo_mx_num2)
-
-censo_mx_bind2%>%
-  mutate(pct_pocup = paste(round(POCUPADA/POBTOT*100,2),"%"))%>%
-  head(5)
-
 #Visualización
 
 censo_mx_bind2%>%
