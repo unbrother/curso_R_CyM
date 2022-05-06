@@ -1,16 +1,23 @@
 ---
-title: "Guia para el curso interno de R: Nivel 1"
+title: "Guia para el curso interno de R"
+author: "José Julián Mendoza"
 output:
   pdf_document: 
       fig_caption: true
       number_sections: true
+      extra_dependencies: 
+        hyphenat: [none]
+        float: null
   html_document: default
+urlcolor: blue
+linkcolor: black
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 \renewcommand{\figurename}{Fig.}
+
 
 # Introducción a R para manejo de bases de datos y operaciones geográficas {.unlisted .unnumbered}
 
@@ -51,15 +58,74 @@ reproducibles y mantener un mejor control de los mismos.
 \newpage
 
 # ¿Cómo usar este documento? {.unlisted .unnumbered}
+Esta guía está diseñada para acompañar el curso y servir de referencia
+para futuras consultas de los temas, conceptos, ejemplos y ejercicios contenidos
+en el mismo. 
 
+Se encuentra dividida en tres partes, que corresponden a cada uno de los niveles
+impartidos. Durante las semanas de importación del curso, es recomendable seguir
+la guía y de ser posible, revisar los temas de las próximas sesiones. La guía se 
+complementa con las presentaciones que serán compartidas al inicio del curso, así
+como las sesiones impartidas y sus respectivas grabaciones.
 
+El curso se encuentra dividido en tres niveles: Básico, Intermedio y Avanzado, 
+que contienen los temas principales para avanzar de manera progresiva en el 
+manejo y uso del lenguaje R. Los ejemplos y ejercicios están compuestos por 
+actividades comunes que utilizan las bases de datos incluidas en la paquetería de
+R, así como actividades con enfoque en el procesamiento, análisis y presentación
+de información relativa al transporte.
+
+El formato del documento incluye las librerías resaltadas en fuente cursiva, las
+funciones en negritas, mientras que el código se encuentra resaltado en el
+formato que utiliza R (los colores pueden cambiar de acuerdo a cada sistema).
+
+Al ser un lenguaje de código abierto, R es totalmente dependiente de la comunidad
+de usuarios y desarrolladores para mantenerse actualizado y seguir evolucionando,
+por lo que es importante conocer algunos de los principales recursos utilizados 
+en el desarrollo del trabajo con R.
+
+CRAN (Comprehensive R Archive Network) es el repositorio principal para los 
+paquetes de R. La paquetería hospedada en CRAN cumple con ciertas políticas 
+técnicas y de calidad, incluyendo que se mantengan actualizados y que la 
+documentación que describe sus funciones sea adecuada y suficiente. Lo anterior
+nos sirve por que los paquetes albergados en CRAN normalmente tienen buen
+soporte y participación de la comunidad.
+
+https://cran.r-project.org
+
+Algunos paquetes en desarrollo no han sido ingresados a CRAN, sin embargo, pueden
+estar disponibles en versiones beta directamente con el desarrollador o en otras
+plataformas. 
+
+La plataforma más conocida para el desarrollo de software abierto es Github. En 
+ella se albergan la mayoría de paquetes en desarrollo y también mantiene una
+participación colaborativa importante, por lo que en muchos casos no existen
+riesgos de instalar alguno de ellos. Esto es importante por que, aunque en este
+curso no se utiliza paquetería fuera de CRAN, muchas de las librerías importantes
+para el estudio de redes de transporte si lo están. 
+
+Por su parte, en Github es posible crear una cuenta personal y mantener los 
+proyectos de trabajo en repositorios privados, que permiten un mejor control
+de versiones y de la evolución del flujo de trabajo.
+
+https://github.com
+
+La plataforma más importante para resolver dudas y preguntas, es Stackoverflow. 
+Esta plataforma contiene respuestas tanto comunes como avanzadas, que pueden 
+ayudar para resolver problemas de manera eficiente. Generalmente, una búsqueda 
+en Google de la tarea que se quiere realizar o del error arrojado en R.
+
+https://stackoverflow.com
+
+Finalmente, cualquier pregunta relacionada con los temas vistos en el curso 
+puede ser consultada conmigo (Julián).
 
 \newpage
 \renewcommand{\contentsname}{Temario}
 \tableofcontents 
 \newpage
 
-# Instalación (10 min)
+# Instalación
 R es un lenguaje distribuído gratuitamente para realizar estadística y análisis 
 computacional. Gracias a su penetración y su componente de código abierto, hoy 
 podemos utilizarlo para realizar análisis geoespaciales.
@@ -68,13 +134,13 @@ Para su instalación y el mejor uso, tenemos que instalar el compilador, así co
 la interfaz de usuario más popular RStudio.  
 
 Compilador:  
-https://cran.r-project.org 
+https://cran.r-project.org
 
 RStudio  
-https://www.rstudio.com/products/rstudio/download/  
+https://www.rstudio.com/products/rstudio/download/
 
-# Introducción a R (20 min)
-En esta sección estudiamos los principios de R y su funcionamiento básico, como 
+# Introducción a R 
+En esta sección estudiamos los principios de R y su funcionamiento básico, cómo 
 se puede utilizar la consola como una calculadora y como asignar variables. 
 También veremos los principales tipos de variables o datos, sus usos y diversas
 formas de modificarlas.
@@ -114,25 +180,25 @@ El primer paso para trabajar en R, es el entendimiento de la estructura del leng
 El lenguaje R consiste en una serie de funciones y comandos que permiten el 
 análisis de diversos tipos de datos. Estas funciones se agrupan en librerías o 
 paquetes (packages), que se desarrollan para resolver casos específicos, por 
-ejemplo, importar y exportar datos de excel con "openxlsx", manejar y transformar
-datos con "dplyr", realizar gráficas y visualizaciones con "ggplot2" o trabajar
-con datos georeferenciados y archivos geoespaciales con "sf".
+ejemplo, importar y exportar datos de excel con *openxlsx*, manejar y transformar
+datos con *dplyr*, realizar gráficas y visualizaciones con *ggplot2* o trabajar
+con datos georeferenciados y archivos geoespaciales con *sf*.
 
 La versión base de R no contiene estás librerías, por lo que hay que 
 "instalarlas" dentro del sistema y cargarlas cada vez que se utilicen. Esto se 
-puede hacer dentro del código con el comando "install.packages()" o dentro de
+puede hacer dentro del código con el comando **install.packages()** o dentro de
 la pestaña Packages.
 
-```{r eval = FALSE}
+```{r Instalar-librerias, eval = FALSE}
 install.packages("ggplot2")
 install.packages("dplyr")
 ```
 
 Las librerías instaladas se mantienen en el sistema, sin embargo, para hacer más
-eficiente el trabajo para cada proyecto, es necesario cargarlas en cada caso.
+eficiente el trabajo en cada proyecto, es necesario cargarlas en cada caso.
 El inicio de un script nuevo generalmente se verá como sigue:
 
-```{r eval = FALSE}
+```{r Cargar-librerias, eval = FALSE}
 
 install.packages(c("ggplot2", "dplyr", "tidyverse"))
 
@@ -142,9 +208,9 @@ library(dplyr)
 
 ```
 
-Es importante notar que es posible correr la función "install.packages()" para 
+Es importante notar que es posible correr la función **install.packages()** para 
 varias librerías a la vez, lo que ahorra líneas de código y tiempo. La función
-"c()" significa "concatenar", y veremos más adelante que se utiliza para crear
+**c()** significa "concatenar", y veremos más adelante que se utiliza para crear
 vectores de datos. También es posible ahorrar tiempo de ejecución omitiendo el 
 paso de instalación, recordando que las librerías solo deben instalarse 
 una vez en cada sistema.
@@ -159,17 +225,17 @@ más limpio y amigable posible para otros usuarios.
 
 ## Aritmética básica
 Las principales funciones base de R, son los operadores matemáticos. Nosotros
-entendemos el símbolo de "+" como la suma de dos números, sin embargo, dentro del
+entendemos el símbolo de **+** como la suma de dos números, sin embargo, dentro del
 lenguaje de programación, la computadora tiene que asociar este símbolo a una
 operación, por lo que también son llamados funciones. En resumen, para R es lo
-mismo 5+5 que sum(5, 5).
+mismo 5+5 que **sum(5, 5)**.
 
 Con esto, en su forma más básica, R es capaz de funcionar como una calculadora, 
 para esto, podemos utilizar la consola, si requerimos hacer cálculos rápidos, o
 agregar estas operaciones dentro del código. Por ejemplo, podemos calcular sumas, 
 restas, multiplicaciones, divisiones y potencias con los operadores conocidos:
 
-```{r}
+```{r Artimetica}
 
 # Suma
 5 + 5 
@@ -190,20 +256,20 @@ restas, multiplicaciones, divisiones y potencias con los operadores conocidos:
 
 ## Declaración de variables
 Las variables son un concepto básico en programación, nos permiten guardar valores
-(ej. 8) u objetos (ej. el vector c("ggplot2", "dplyr", "tidyverse")) en R, para
-después utilizar el nombre de la variable para acceder a su contenido y realizar
+(ej. 8) u objetos (ej. el vector **c("ggplot2", "dplyr", "tidyverse"))** en R, para
+después utilizar el nombre de la variable, acceder a su contenido y realizar
 operaciones sobre ella.
 
-Para asignar una variable, se utiliza la función "=" o la función "<-". Por 
+Para asignar una variable, se utiliza la función **=** o la función **<-**. Por 
 convención (y limpieza del código) la segunda se utiliza de manera generalizada
-y en solo en ciertos casos se utiliza el signo de "=" (por ejemplo, al asignar
+y en solo en ciertos casos se utiliza el signo de **=** (por ejemplo, al asignar
 variables dentro de una función).
 
 Se pueden asignar variables de diferentes tipos y nombrarlas de casi cualquier 
 forma, de nuevo, la convención dice que es mejor colocar nombres descriptivos y
 separar las palabras con un punto o un guión bajo.
 
-```{r}
+```{r Asignacion-mejores-practicas}
 # Buena práctica
 paquetes_lista <- c("ggplot2", "dplyr", "tidyverse")
 calificaciones_grupo_A <- c(8, 6, 7, 5, 10)
@@ -216,16 +282,16 @@ calA = c(8, 6, 7, 5, 10)
 
 Como se puede observar, las variables declaradas se añaden al entorno, y podemos
 acceder a ellas dando click, escribiendo su nombre en la consola o con la función
-"print()"
+**print()**.
 
-```{r}
+```{r Imrpimit}
 print(paquetes_lista)
 ```
 
 Una vez que tenemos la definición de variables, se pueden hacer operaciones con
 ellas, un ejemplo simple es si asignamos valores únicos a dos variables diferentes.
 
-```{r}
+```{r Asignacion-suma}
 manzanas <- 5
 peras <- 4
 
@@ -234,7 +300,7 @@ manzanas + peras
 
 El resultado también puede asignarse a otra variable, como sigue:
 
-```{r}
+```{r Asignacion-resultado}
 frutas <- manzanas + peras
 print(frutas)
 ```
@@ -252,7 +318,7 @@ fundamentales son:
 
 Como dijimos, no podemos sumar peras con manzanas
 
-```{r error = TRUE}
+```{r Peras y manzanas, error = TRUE}
 manzanas <- 5
 peras <- "cuatro"
 manzanas + peras
@@ -264,64 +330,2063 @@ código, por ejemplo, en una base de datos, los valores numéricos pueden ser
 interpretados como texto, y podríamos estar cometiendo errores al no convertirlos
 primero.
 
-```{r error = TRUE}
+```{r Peras y manzanas 2, error = TRUE}
 manzanas <- 5
 peras <- "4"
 manzanas + peras
 ```
 
 Para conocer con que tipo de variable estamos trabajando, la versión base de R
-cuenta con la función "class()".
+cuenta con la función **class()**.
 
-```{r}
+```{r Peras y manzanas 3}
 class(manzanas)
 class(peras)
 ```
 
+\newpage
+# Objetos
+En R trabajamos con valores y estructuras de datos que se almacenan como objetos. 
+Un objeto es un valor o una serie de valores almacenados en diferentes composiciones que
+sirven para ejecutar funciones sobre ellos.
 
-# Objetos (60 min)
+En esta sección trabajaremos con las estructuras de datos más versátiles y con 
+mayor funcionalidad de R, veremos las mejores prácticas para utilizarlas, así 
+como los usos más comunes de cada una. 
+
 ## Vectores
+Una de las estructuras de datos más simples, y la más común en ser utilizada por
+su versatilidad es el vector. Los vectores en R son colecciones ordenadas de 
+números. Regresando a la definición de los objetos, un valor único se considera
+un vector de longitud uno.
+
+### Repaso sobre asignación
+Para entender mejor la asignación de objetos, dedicamos unas líneas para 
+extender los conceptos detrás de ella. Podemos observar que existen diversos 
+métodos para asignar un objeto a una variable, como se mencionó anteriormente, 
+el estándar más aceptado por convención es el operador **<-** (signo de menor que
+seguido por un guión medio). El signo de igual (**=**) funciona pero es utilizado
+en casos específicos.
+
+La función **assign()** también sirve para asignar objetos a variables, no es tan 
+comunmente utilizada en vectores pero es útil conocerla, ya que para otro
+tipo de objetos es más común, e incluso cuando se asigna un vector dentro de un
+bucle o una función. 
+
+Es importante recordar la sintáxis de asignación de vectores, compuesta por
+la variable, el operador o función de asignación y la función **c()** que concatena
+los valores.
+
+```{r}
+# Vector de tiempos de recorrido en minutos
+
+tiempos <- c(5, 10, 15, 20)
+assign("tiempos", c(5, 10, 15, 20))
+
+```
+
+Al asignar valores a la misma variable, ésta se sobreescribe.
+
+El operador **<-** también asigna si se utiliza el revés, manteniendo la lógica de 
+la expresión, es decir, primero el contenido del objeto y después la variable.
+
+```{r}
+# Vector de distancias en kilómetros
+
+c(8, 15, 20, 40) -> distancias
+
+```
+
+### Operaciones en vectores
+Los operadores aritméticos vistos anteriormente funcionan también en los vectores
+de la misma manera en como operarían un vector normal en matemáticas. Por lo que 
+es posible realizar cualquier operación entre ellos. Incluso podemos operar sobre
+vectores de un elemento.
+
+```{r}
+# Cálculo de velocidades en kilómetros por hora
+
+minutos <- 60
+velocidades <- distancias / tiempos * minutos
+
+print(velocidades)
+```
+
+También es posible utilizar otras funciones matemáticas en forma de texto, como
+por ejemplo log, exp, sin, cos, tan y sqrt. Por otra parte, muchas de las funciones
+dentro de la paquetería de R están diseñadas para trabajar sobre vectores, por 
+ejemplo, las funciones **min()** y **max()** extraen los valores mínimos y máximos de un
+vector o una serie de vectores, la función **mean()** devuelve la media de los valores
+en el vector, **median()** devuelve la mediana, etc.
+
+```{r}
+max(velocidades)
+min(velocidades)
+mean(velocidades)
+median(velocidades)
+```
+
+### Sucesiones
+
+En R se pueden generar suceciones numéricas con diferentes funciones, por ejemlo,
+**1:5** conforma el vector **c(1,2,3,4,5)**. R interpreta los "dos puntos" como un
+operador. La forma **5:1** construye una sucesión descendente.
+Para generar sucesiones más complejas, podemos utilizar la función *seq()*
+(secuencia), que cuenta con 5 argumentos.
+
+Vale la pena detenerse en los argumentos de una función y en la función de ayuda
+**?**. Al escribir la la función de ayuda como sufijo de cualquier función en la 
+consola, R regresa el archivo de ayuda de la función, que se compone de una 
+descripción de la función y sus argumentos. En este caso, si escribimos **?seq()**,
+en la pestaña "Help" veremos el documento descriptivo.
+
+
+```{r}
+?seq()
+```
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 12cm]{img/seq_help.png}\quad
+  \caption{Documento de ayuda de la función seq()}
+\end{figure}
+
+Los argumentos de la función **seq()** son "from", "to", "by", "length.out" y 
+"along.with". Una función se compone de argumentos obligatorios y argumentos
+opcionales, además de que los argumentos se dan por posición, es decir, R entiende
+y asigna los argumentos según sean dados, por lo que **seq(1,5)**, 
+**seq(from = 1, to = 5)**, son equivalentes a **1:5**.
+
+```{r eval = FALSE}
+seq(1, 5)
+seq(from = 1, to = 5)
+1:5
+```
+
+La función **seq()** puede operar con argumentos incompletos por que incluye valores
+predeterminados para los argumentos no obligatorios, por ejemplo, **by = 1**.
+El argumento **by** determina el "paso" de la sucesión, que por defecto es "de 
+uno en uno", pero se puede modificar para hacerlo "de dos en dos" o en cualquier
+escala deseada.
+
+```{r}
+seq(from = 1, to = 5, by = 0.2)
+tiempos <- seq(5, 20, 5)
+print(tiempos)
+```
+
+### Índices con vectores
+Como vimos, los vectores pueden ser de diferentes clases, a su vez, pueden ser 
+utilizados para guardar información, operar sobre ellos e incluso operar con 
+ellos, es decir, se puede utilizar un vector lógico o de índices para realizar
+selecciones sobre otro vector.
+
+Por ejemplo, si tenemos un vector de tiempos, y queremos filtrar solamente los 
+valores mayores a 15 minutos, podemos hacerlo de la siguiente forma:
+
+```{r}
+tiempos <- seq(1, 30, 2)
+tiempos_select <- tiempos > 5
+tiempos_select
+```
+
+Lo que nos da un vector lógico, en donde solamente se imprimen como verdaderos
+los valores en donde el tiempo es mayor a 5 minutos.
+
+El operador **[ ]** (corchetes) le dice a R que busque el contenido del mismo dentro
+de un vector (o base de datos), por lo que el siguiente código devuelve solamente
+los elementos que aparecen como "TRUE" en el vector índice.
+
+```{r}
+tiempos[tiempos_select]
+```
+
+Es posible anidar funciones dentro del vector de índices, por lo que lo anterior
+se puede realizar en una sola línea, tal que:
+
+```{r}
+tiempos[seq(1,30,2)>5]
+```
+
+Además de vectores lógicos, los índices pueden ser números naturales positivos, 
+en donde estos números corresponden a la posición dentro del vector a filtrar. 
+Así, **tiempos[3]** nos devolverá el tercer elemento del vector **tiempos**, 
+**tiempos[1:5]** nos devolverá los primeros 5 elementos y **tiempos[c(1,5)]** 
+imprime el primer y el quinto elemento. Cabe destacar la diferencia en este 
+último caso, en donde el vector de índices debe proporcionarse con la función 
+**c()**.
+
+```{r}
+tiempos[3]
+tiempos[1:5]
+tiempos[c(1,5)]
+```
+
+Por su parte, un vector de números naturales negativos devuelve todos los elementos
+**excepto** los marcados en el índice.
+
+```{r}
+tiempos <- seq(5,20,5)
+tiempos[-3]
+tiempos[-(1:3)]
+tiempos[-c(2,4)]
+```
+
+Es posible utilizar un vector de caractéres o cadena de carácteres como índice, 
+siempre que el vector original contenga el atributo **names** que sirve para 
+identificar sus componentes. 
+
+```{r}
+names(tiempos) <- c("auto", "tp", "bici", "peatón")
+tiempos[c("auto", "bici")]
+```
+
+Lo anterior puede ayudar a realizar la selección ya que es más fácil recordar 
+los nombres que los índices numéricos, que es una estrategia que se utiliza mucho
+más para realizar selecciones y filtros en data frames (hojas o bases de datos).
+
 ## Matrices
+
+En R, las matrices son colecciones de elementos que tienen el mismo tipo o clase
+de datos (numérico, carácter o lógico) que tienen un arreglo de filas y columnas
+fijo. Una matriz puede construirse utilizando la función **matrix()**.
+
+En los siguientes ejemplos, utilizaremos lo visto hasta el momento para analizar
+los elementos como una matriz. Podemos empezar por retomar los dos vectores
+creados de tiempos y distancias, pero esta vez de manera horizontal. Es decir, 
+en lugar de definir vectores de tiempos y distancias, definiremos el vector 
+de tiempo y distancia para cada modo. Cabe mencionar que se puede trabajar de 
+las dos formas.
+
+### Creación de una matriz
+
+Utilizaremos un ejemplo simple, un recorrido de la oficina de Cal y Mayor al 
+Parque de los Venados.
+
+```{r vector de modos}
+# Vectores de modo de transporte con la forma (tiempo, distancia)
+auto <- c(9, 3.2)
+peaton <- c(49, 3.9)
+bici <- c(12, 3.2)
+```
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 12cm]{img/maps_rutas.png}\quad
+  \caption{Recorrido ejemplo en google maps}
+\end{figure}
+
+Después podemos concatenar los vectores, y construir la matriz. El argumento
+**byrow** le indica a la función que le dictaremos los datos de manera horizontal, 
+mientras que el argumento **nrow** le indica el número de filas. 
+
+```{r matriz de modos}
+modos <- c(auto, peaton, bici)
+modos
+modos_matrix <- matrix(modos, byrow = TRUE, nrow = 3)
+
+modos_matrix
+```
+
+Como vemos, generamos una tabla, que es una matriz y no un data frame debido a 
+que todos sus elementos son del mismo tipo de variable (numérico en este caso). 
+También es posible tener una matriz lógica o de caractéres. 
+La matriz generada no contiene identificadores de filas o columnas, pero eso 
+podemos solucionarlo fácilmente con las funciones **rownames()** y **colnames()**.
+
+```{r nombres en matriz}
+modos <- c("auto", "peaton", "bici")
+metrica <- c("tiempo", "distancia")
+
+rownames(modos_matrix) <- modos
+colnames(modos_matrix) <- metrica
+
+modos_matrix
+```
+
+### Selección en matrices
+Podemos extraer los valores de la matriz tanto por su posición numérica como por
+los nombres de filas o columnas. 
+
+```{r velocidades}
+modos_matrix[, "tiempo"]
+modos_matrix["auto",]
+modos_matrix[1:3, 2]
+modos_matrix[1, 1:2]
+
+velocidades <- modos_matrix[, "distancia"]/modos_matrix[, "tiempo"] * 60
+velocidades
+```
+
+Podemos calcular un vector de velocidades 
+utilizando estos índices, que después podemos añadir a la matriz por medio de la
+función **cbind()**. Las funciones **rbind()** y **cbind()** se utilizan para
+agregar datos a matrices y data frames. La primera anexa filas y la segunda 
+columnas.
+
+```{r Matriz total}
+modos_matrix_total <- cbind(modos_matrix, velocidades)
+modos_matrix_total
+```
+
+## Factores
+La información puede categorizarse en un número limitado de formas. En R, 
+conviene guardar los datos categóricos como factores. Los factores son importantes
+en el análisis de datos, tanto para agrupar datos y generar estimaciones sobre 
+ellos, o para realizar visualizaciones más amigables para diversas audiencias.
+
+### ¿Qué es un factor?
+El término "factor" se refiere a un tipo de datos estadísticos utilizados para
+guardar variables categóricas. Es importante que R conozca cuales variables 
+son factores.
+
+En nuestro ejemplo, para mantenerlo práctico, podemos agregar un vector de factores
+que ayuden a describir el viaje realizado. Los factores son claramente más
+útiles para colecciones de datos más amplias, pero en este documento nos 
+concentramos más en la explicación básica de las funciones del programa. Más
+referencias pueden encontrarse en las presentaciones y ejercicios del curso.
+
+### Conversión a factores
+Con lo anterior, podemos anexar el vector de factores con el día en que se 
+realizó el viaje. Generamos un vector de caractéres, que después convertimos
+en un vector de factores por medio de la función **factor()**. Es importante
+mencionar que uno de los atributos de un vector de factores son sus niveles,
+que definen el orden de los mismos. Si bien los factores pueden tener un orden, 
+no tienen jerarquía, es decir, no es posible determinar si un martes y más o menos
+que un miércoles, pero si es posible determinar que el martes es primero que el
+miércoles.
+
+```{r Factores 1}
+dia <- c("martes", "martes", "miercoles")
+dia_factor <- factor(dia)
+```
+
+Como vemos, podemos definir todos los niveles posibles del vector, sin necesidad
+de que éste contenga todos ellos. También es posible definir los niveles y su orden
+dentro de la propia función **factor()**.
+
+```{r Factores 2}
+dia_factor <- factor(dia, ordered = TRUE, levels = c("lunes", "martes", "miercoles",
+                                                     "jueves", "viernes", "sabado",
+                                                     "domingo"))
+cbind(modos_matrix_total, dia_factor)
+```
+
+Más adelante veremos diversas operaciones utilizando factores, tanto en el 
+análisis de datos como para la generación de visualizaciones gráficas.
+
 ## Data Frames
+### Concepto de Data Frames
+La mayor parte de las series de datos con las que se trabaja en R están guardados
+como **dataframes**. Del capítulo de matrices podemos recordar que en ellas, todos
+los datos que guardamos deben ser del mismo tipo. La serie de datos utilizada
+para nuestra matriz **modos_matrix_total** estaba compuesta solo por elementos
+numéricos. Pero para realizar análisis más profundos en transporte, normalmente
+tendremos que utilizar una combinación de elementos numéricos, de caractéres y 
+lógicos. Por ejemplo, podemos guardar el modo de transporte o el género de los 
+usuarios como una variable categórica en forma de factores, si el viaje fue 
+realizado de día como una variable lógica, etc.
+
+### Caso de estudio: Censo de población urbana INEGI
+Para este capítulo, utilizaremos el paquete *importinegi*, desarrollado por el 
+Instituto Nacional de Estadística y Geografía (INEGI), que se encuentra en CRAN 
+y presenta funciones muy útiles. Con la función **censo_poblacion_urbano()** podemos
+descargar el censo de población para las AGEBs urbanas, utilizando los
+argumentos **year** y **estado** limitamos la descarga al año 2010 en la Ciudad
+de México. 
+Por su parte, la función **head()** nos muestra los primeros 10 registros de la 
+base de datos. Importante mencionar que para R, una fila es llamada una 
+**observación** y una columna una **variable**.
+
+```{r Import censo}
+library(importinegi)
+censo <- censo_poblacion_urbano(year = "2010", estado = "CDMX")
+
+head(censo)
+```
+
+Con la función **str()** realizaremos una revisión previa de la estructura de
+los datos, para conocer las variables incluidas en la base sus tipos. Con esto
+podemos definir cuales variables nos son útiles y cuales podemos descartar.
+
+```{r Structure}
+str(censo)
+```
+
+### Introducción a manejo de datos
+Vemos que descargamos una base de datos con 63,028 observaciones y 28 variables.
+Para mantener este ejercicio más sencillo, vale la pena adelantar algunas funciones
+de manejo de datos, especialmente las funciones **filter()** y **select()**. Con
+**filter()** podemos elegir que observaciones mantener de acuerdo a uno o varios 
+criterios, mientras que con **select()** elegiremos solamente las variables con
+las que vamos a trabajar. Esto es útil tanto para tener más claridad al trabajar
+con bases de datos muy grandes, así como para permitir que R utilice menos memoria
+al procesar los datos. Estas funciones pertenecen al paquete *dplyr* que a su vez
+es parte de una serie de paquetes llamados *tidyverse*.
+
+Para fines de este ejemplo, filtraremos la primer alcaldía que aparece: Azcapotzalco, 
+y seleccionaremos solamente unas cuantas variables con las que podamos trabajar.
+La función **head()** maneja un argumento **n**, con el cual podemos elegir el número
+de elementos a mostrar, como se mencionó, el valor por defecto es 10.
+
+```{r Filter y Select Intro}
+library(dplyr)
+censo_filtered <- filter(censo, NOM_MUN == "Azcapotzalco")
+censo_filtered_select <- select(censo_filtered, NOM_MUN, AGEB, MZA, VIVTOT, POBTOT)
+
+head(censo_filtered_select, n = 5)
+
+```
+
+Los elementos de un data frame pueden ser seleccionados de la misma forma que
+los elementos de vectores y matrices, es decir, si queremos extraer la quinta
+observación de la tabla de datos que acabamos de crear, podemos hacerlo de la
+siguiente manera:
+
+```{r Extract from df}
+censo_filtered_select[5,]
+```
+
+También pudimos haber realizado la selección utilizando índices en lugar de la
+función **select()**, pero como podemos ver, puede resultar un poco más complejo
+si se tienen bases de datos de muchas variables.
+
+```{r Index select}
+censo_filtered_select2 <- censo[censo["NOM_MUN"] == "Azcapotzalco",c(4, 7:8, 24, 28)]
+head(censo_filtered_select2, n = 5)
+```
+
+En este caso, en el índice de columnas le indicamos a R un vector de posiciones
+de acuerdo con la variable que debe mantener. Lo mismo se puede hacer utilizando
+los nombres de las variables. Sin embargo, esto requiere de índices anidados y 
+más adelante veremos que el flujo de trabajo más moderno de R se beneficia mucho
+más de utilizar las funciones **filter()** y **select()**.
+
+Por su parte, tal vez la función más importante a estudiar dentro del manejo de
+dataframes en R, es el operador **\$**. Cuando las columnas de la base de datos
+tienen nombres, el operador nos sirve para seleccionarlas en forma de vector, 
+extrayendo todos los valores de una variable. En términos generales, las dos 
+funciones mostradas a continuación producen el mismo resultado, pero **select()**
+mantiene la estructura de dataframe mientras que **\$** extrae los datos como 
+vector.
+
+```{r Operador $}
+class(select(censo_filtered_select, POBTOT))
+class(censo_filtered_select$POBTOT)
+```
+
+Finalmente, la función **order()** nos devuelve un vector de posiciones con el 
+orden de los valores. Utilizamos el argumento **decreasing = TRUE** para indicar
+que el orden debe ser descendente.
+
+```{r Order}
+orden <- order(censo_filtered_select$POBTOT, decreasing = TRUE)
+head(orden, n = 5)
+```
+
+Esto quiere decir que el elemento 2,860 es el primero en el orden de valores,
+para ordenar la base de datos, tenemos que indicarle que estos valores registran
+ese orden.
+
+```{r}
+censo_orden <- censo_filtered_select[orden,]
+head(censo_orden, n = 5)
+```
+
 ## Listas
+### Concepto de lista
+Las listas son el último tipo de estructura de datos y el más complejo. La 
+principal diferencia con los elementos anteriores es que las listas permiten
+almacenar series de datos de diferente longitud y de diferentes clases. 
+En una misma lista se pueden almacenar variedades de objetos como matrices, 
+vectores y dataframes, incluso otras listas. Incluso no es obligatorio que estos
+objetos se relacionen entre sí.
 
-# Funciones intermedias (60 min)
-## Condicionales
+### Creación de listas
+Con los elementos generados hasta ahora, podemos almacenar el vector de velocidades,
+la matriz de modos y el dataframe del censo en una lista.
+
+```{r Mylist}
+mi_lista <- list(velocidades, modos_matrix_total, censo_orden)
+str(mi_lista)
+```
+
+Se puede generar una lista y asignar nombres a cada elemento, esto es especialmente
+útil dadas las características de una lista, que como se mencionó, pueden incluir
+combinaciones de estructuras de datos.
+
+```{r Named list}
+mi_lista <- list(vel = velocidades, matrix = modos_matrix_total, 
+                 censo = censo_orden)
+str(mi_lista)
+```
+
+Con la lista con nombres, podemos utilizar también los corchetes para acceder a 
+sus elementos, en este caso, para acceder a cada elemento de la lista, se utiliza 
+un doble corchete. Ya con el elemento extraído, podemos utilizar los corchetes
+sencillos (ya que habremos extraído un elemento que no es una lista).
+
+```{r Extract from list}
+mi_lista[["vel"]]
+
+mi_lista[["vel"]][2]
+
+mi_lista[["censo"]][1:5,]
+```
+
+\newpage
+# Funciones intermedias
+En este capítulo veremos diferentes funciones dentro de R que nos sirven para
+comparar datos y generar bucles o ciclos (loops) y condicionales para eficientar
+los análisis realizados, incluyendo las funciones tipo "apply", que sirven para
+aplicar funciones a diferentes estructuras de datos. En la sección de utilidades
+veremos el uso de expresiones regulares, manipulación de datos y el manejo de 
+fechas y horas.
+
+## Condicionales y control de flujo
+### Operadores relacionales
+Los operadores relacionales o comparadores, son operadores que nos ayudan a ver
+como un objeto se relaciona con otro en R. Por ejemplo, podemos revisar si dos 
+objetos son iguales. Para obtener este resultado, utilizamos el operador doble
+igual **==**.
+
+```{r Equals}
+TRUE == TRUE
+"hola" == "adios"
+2 == 2
+3 == 2
+```
+
+El operador contrario al signo de doble igual es el de desigualdad, utilizamos
+un signo de exclamación seguido de un signo de igual, **!=**. Esto nos devuelve
+un resultado lógico dependiendo de si la desigualdad es cierta o falsa.
+
+```{r Not equal}
+TRUE != TRUE
+"hola" != "adios"
+2 != 2
+3 != 2
+```
+
+R también utiliza como operadores los signos "menor que" y "mayor que", así como 
+las combinaciones "menor o igual" y "mayor o igual". Con ellos podemos evaluar
+valores numéricos y caractéres. En este último caso, R realiza una evaluación
+por la posición alfabética de los caractéres, es decir, "adios" es mayor que 
+"hola" por que la "a" viene primero que la "h". Al realizar la evaluación de un
+vector lógico, TRUE es mayor que FALSE, ya que dentro del sistema, TRUE equivale
+a 1 y FALSE a 0.
+
+```{r Mayor que menor que}
+2 > 1
+"hola" > "adios"
+TRUE < FALSE
+```
+
+
+Es posible utilizar los operadores relacionales con vectores. Regresando al vector
+de tiempos, podemos comparar un vector con un valor y devolver un vector lógico.
+Utilizando el vector de tiempos generado previamente, podemos saber los valores
+que son menores o iguales a 10 minutos. 
+
+```{r Relacionales con vectores 1}
+tiempos
+tiempos_10 <- tiempos <= 10
+tiempos_10
+```
+
+Con el vector creado, podemos utilizar la indexación para extraer los tiempos en
+donde se cumple que son menores o iguales a 10 minutos.
+
+```{r Tiempos filter}
+tiempos[tiempos_10]
+```
+
+A su vez, es posible comparar la relación entre dos vectores, en este ejemplo,
+suponemos que tenemos dos vectores de tiempo, para diversos modos de transporte, 
+con viajes realizados en días diferentes. Podemos saber en qué días el tiempo
+en cada modo de transporte es mayor o igual entre el martes y el jueves. Vemos
+que viajar en martes resultó más rápido para todos los modos excepto la bicicleta.
+
+```{r Relación vectores}
+modo <- c("auto", "tp", "bici", "peaton")
+martes <- c(7, 8, 12, 25)
+jueves <- c(6, 9, 13, 25)
+
+cbind(modo, martes, jueves)
+
+martes >= jueves
+```
+
+### Operadores lógicos
+Los operadores lógicos sirven para cambiar o combinar los resultados de los 
+operadores relacionales. En R, los operadores lógicos son **AND**, **OR** y **NOT** (**&**, **|**, **!**).
+
+El operador **AND** se utiliza para combinar condiciones que deben cumplirse al mismo tiempo. **OR** se utiliza para cuando requerimos que se cumpla una de varias condiciones. 
+
+```{r operadores logicos}
+# Operador AND
+TRUE & TRUE
+FALSE | TRUE
+
+x <- 12
+x > 5 & x < 15
+
+x <- 17
+x > 5 & x < 15
+
+# Operador OR
+TRUE | TRUE
+FALSE | TRUE
+
+y <- 4
+y < 5 | y > 15
+
+y <- 14
+y < 5 | y > 15
+```
+
+Por su parte, el operador **NOT** sirve para obtener el inverso de **AND**, es decir, los registros que NO cumplen la condición.
+
+```{r operador not}
+
+is.numeric(5)
+!is.numeric(5)
+
+```
+
+### Condicionales
+
+Las sentencias condicionales utilizan la función **if()** con la cual evalúan una
+o varias condiciones. Si la condición se evalua como **TRUE**, se ejecuta el 
+código asociado con la sentencia. La condición a revisar se escribe dentro del
+paréntesis, mientras que el código a ejecutar se escribe entre llaves.
+
+```{r condicional if, eval = FALSE}
+
+if(condicion) {
+  expresion
+}
+
+```
+
+Podemos evaluar si un número es positivo o negativo, e imprimir una respuesta
+del sistema de acuerdo con la condición, si la condición se evalúa como falsa,
+no se produce respuesta.
+
+```{r if ejemplo}
+x <- -3
+if(x < 0) {
+  print("x es negativo")
+}
+
+```
+
+Para conseguir un resultado en caso de que no se cumpla la condición, utilizamos
+la sentencia **else**, que no necesita una expresión condicional explícita, pero
+debe utilizarse en conjunto con **if**. El código asociado a la sentencia **else**
+se ejecuta cuando la condición no se satisface.
+
+```{r else, eval = FALSE}
+
+if(condicion) {
+  expr1
+} else {
+  expr2
+}
+
+```
+
+Para el ejemplo anterior, podemos añadir un texto que indique que el número es
+positivo
+
+```{r else 2}
+x <- 3
+if(x < 0) {
+  print("x es negativo")
+} else {
+  print("x es positivo o cero")
+}
+
+```
+
+Finalmente, para combinar condiciones, podemos utilizar la sentencia **else if**, 
+que permite revisar condiciones en pasos.
+
+```{r else if, eval = FALSE}
+
+if(x < condicion1) {
+  expr1
+} else if(condicion2) {
+  expr2
+} else {
+  expr3
+}
+
+```
+
+Así podemos evaluar cuando el valor es negativo, cero o positivo.
+
+```{r else if 2}
+x <- 0
+if(x < 0) {
+  print("x es negativo")
+} else if(x == 0) {
+  print("x es cero")
+} else {
+  print("x es positivo")
+}
+
+```
+
 ## Bucles (loops)
+
+Los loops son útiles para realizar procesos iterativos, los bucles **while** son
+procesos **if** repetitivos, mientras que los bucles **for** son iteraciones sobre
+los elementos en una secuencia.
+
+### Bucle **while**
+
+Los bucles **while** son similares a las sentencias **if** debido a que ejecutan 
+el código dentro de ellos dependiendo de si se cumple o no una condición. Sin
+embargo, el bucle **while** se seguirá ejecutando mientras esta condición se 
+siga cumpliendo.
+La sintáxis de un bucle **while** es muy similar a la de las sentencias condicionales,
+en el siguiente ejemplo, vemos como ejecutamos el bucle en donde simplemente se
+incrementa un contador hasta que llega a un valor especificado, en este caso 7.
+
+```{r while}
+n <- 1
+while(n <= 7) {
+  print(paste("contador es igual a", n))
+  n <- n + 1
+}
+
+```
+
+La sentencia **break** "rompe" el bucle cuando R la encuentra, interrumpiendo el
+código activo en el bucle. En el ejemplo, detenemos el bucle cuando el valor 
+asignado a "n" es divisible entre 5, a través del operador "modulo" **%%**.
+
+```{r break}
+n <- 1
+while(n <= 7) {
+  if(n %% 5 == 0) {
+    break
+  }
+  print(paste("contador es igual a", n))
+  n <- n + 1
+}
+
+```
+
+### Bucle **for**
+Es una sentencia de control que permite iterar una expresión o código sobre los
+elementos de un vector en una secuencia definida. La condición se prueba primero
+y despés se ejecuta el código contenido. La sintáxis es como sigue:
+
+```{r for syntax, eval = FALSE}
+for(valor in secuencia) {
+  expr
+}
+```
+
+Con el siguiente código, podríamos emular lo que realizaba el bucle **while** en
+la sección anterior, con la diferencia de que la condición está como una secuencia, 
+además de que no es necesario inicializar la variable, pues se mantiene interna
+dentro del bucle.
+
+```{r for while}
+for(n in 1:7) {
+  print(paste("contador es igual a", n))
+}
+```
+
+Lo anterior vuelve más práctico definir tanto las variables internas del bucle,
+como las condiciones.  
+La instrucción **break** también puede utilizarse dentro de un bucle **for** de la misma
+manera que se utilizó en la sección anterior. Por su parte, existe la función **next**,
+que omite iterar sobre los valores que cumplen con la condición descrita dentro de la
+función. Como se observa, el número 4 no se imprime.
+
+```{r next}
+for(n in 1:7) {
+  if(n == 4) {
+    next
+  }
+  print(paste("contador es igual a", n))
+}
+```
+
 ## Funciones
+
+### Concepto de funciones
+Como hemos visto, las funciones son muy importantes en R y en casi cualquier otro
+lenguaje de programación. Las funciones que se han discutido hasta ahora, fueron
+implementadas en R desde un principio (en R base) o generadas para cumplir cierta
+tarea a través del trabajo de la comunidad y a la para del desarrollo en la 
+tecnología de procesamiento computacional. Por ejemplo, funciones que realizan 
+procesos de Machine Learning no hubieran sido posibles (o viables) con los 
+procesadores de 1997. Así como funciones que utilizan procesos espaciales y 
+geográficos.  
+Una función es una especie de caja negra, que se alimenta de un input, realiza
+los procesos y devuelve un output. Por ejemplo, la función **sd()** devuelve la
+desviación estándar (standard deviation) de una serie de valores. Conocemos que 
+la expresión para calcular la desviación estándar es: 
+
+$$
+\sigma = \sqrt{\frac{\sum_{i = 1}^{N}(x_i - \bar{x})^2}{N-1}}
+$$
+De acuerdo con esta fórmula, podemos ver que la función está compuesta por las 
+operaciones necesarias, pero además probablemente utilice otras funciones, ya que
+la instrucción **sd()** está diseñada para trabajar con cualquier cantidad de 
+datos numéricos, en el ejemplo que sigue colocamos cuatro. Vemos que la función
+y las operaciones regresan el mismo resultado.
+
+```{r desviacion estandar}
+sd(c(1, 5, 6, 7))
+
+valores <- c(1, 5, 6, 7)
+media <- mean(valores)
+xi <- valores - media
+xi2 <- xi^2
+suma <- sum(xi2)
+suma_n <- suma/(length(valores)-1)
+sd <- sqrt(suma_n)
+sd
+```
+
+Como se vio anteriormente, las función **?** antes del nombre de cualquier función
+nos lleva a su documentación.  
+La función *sd()* es muy sencilla en cuanto a sus argumentos, y dentro de ella solo
+existe una expresión, sin embargo, las funciones también incluyen generalmente
+mensajes de error, advertencias, etc.  
+En resumen, las funciones son una caja negra por lo cual es necesario conocer su
+comportamiento y tener idea de los resultados esperados.
+
+### Creación de funciones
+Escribir una función no es complicado y puede ser muy útil cuando sabemos que
+vamos a realizar un proceso a lo largo de todo el flujo de trabajo. Por ejemplo,
+es posible convertir el código escrito anteriormente para calcular la desviación
+estándar en una función, con la siguiente sintaxis:
+```{r function syntax, eval = FALSE}
+mi_fun<- function(arg1, arg2) {
+  cuerpo
+}
+
+```
+
+De tal forma, que a manera simplificada, la función podría escribirse como:
+
+```{r mi funcion}
+mi_sd <- function(valores) {
+  media <- mean(valores)
+  xi <- valores - media
+  xi2 <- xi^2
+  suma <- sum(xi2)
+  suma_n <- suma/(length(valores)-1)
+  sd <- sqrt(suma_n)
+  sd
+}
+```
+
+Lo que guarda la expresión como una función, que podemos revisar en la parte 
+inferior del panel "Environment". Si corremos la función, nos dará como resultado
+la desviación estándar de los valores que coloquemos. Cabe destacar que los 
+argumentos de una función no son variables dentro del entorno de R, y las variables
+declaradas dentro de ella, son locales, por lo que tampoco son añadidas al entorno.
+
+```{r mi sd}
+mi_sd(c(1, 5, 6, 7))
+```
+Ahora, podemos calcular la desviación estándar para cualquier número de valores 
+(ya podíamos con la función sd pero ahora lo haremos con nuestra propia función).
+
+```{r}
+vector <- c(1,6,7,4,8,23,7,6,54,7,25,27)
+sd(vector)
+mi_sd(vector)
+```
+
 ## Familia "apply"
+La familia "apply" está compuesta por una serie de funciones que permiten aplicar
+una función a una secuencia de datos, de tal forma que es posible en muchos casos
+cambiar un for loop por alguna función de la familia apply, principalmente **lapply()**
+y sus variantes **saply()** y **vapply()**.
+
+### Función **lapply()**
+La función **lapply()** toma tres argumentos, una lista **X**, una función (o el nombre
+de una función) **FUN**, y otros argumentos a través del argumento **...**. Si **X**
+no es una lista, **lapply()** la convierte en una.  
+Como ejemplo, un vector que contiene los números del 1 al 4, se puede pasar como
+argumento de la función **runif()** (random uniform) que genera un número de 
+números aleatorios. En el siguiente ejemplo, generamos 5 números aleatorios entre
+0 y 1, ya que los argumentos por defecto de la función son min = 0 y max = 1.
+
+```{r runif}
+runif(5)
+```
+
+Con **lapply()**, podemos recorrer sobre la serie de 1:4 y generar 1, 2, 3 y 4
+números aleatorios entre 0 y 1. El siguiente código toma el vector "x", lo 
+convierte en una lista y le aplica la función runif a cada elemento. Esto hace 
+posible que **lapply()** trabaje sobre todos los elementos ya que permite que cada
+uno sea de tipos o clases diferentes.
+
+```{r lapply}
+x <- 1:4
+lapply(x, runif)
+```
+
+El resultado es una lista de elementos de diferente longitud, como se mencionó,
+por practicidad el resultado de la función siempre es una lista, a la cual se 
+le puede aplicar la función **unlist()** para transformarla en un vector, que solo
+agrega los elementos conforme van aparenciendo en la lista.
+
+```{r unlist}
+unlist(lapply(x, runif))
+```
+
+El argumento **...** se utiliza para hacer uso de *funciones anónimas*, que son
+funciones creadas dentro de **lapply()** que solamente son utilizadas dentro de la
+misma.  
+Por ejemplo, si alimentamos una lista de matrices a la función, y queremos extraer
+la primera columna de cada una, podemos utilizar **lapply()** con una función 
+anónima.
+
+```{r funcion anonima}
+x <- list(a = matrix(1:4, 2, 2), b = matrix(1:6, 3, 2))
+x
+
+lapply(x, function(arg) arg[,1])
+```
+
+### Función **sapply()**
+El nombre de la función **sapply()** viene de "simplify apply", y se puede utilizar
+cuando sabemos que los resultados de la función serán todos del mismo tipo. En
+resumen, es el paso directo de utilizar las funciones **lapply()** seguida de
+**unlist()**.
+
+```{r sapply}
+x <- list(a = 1:4, b = rnorm(10), c = rnorm(20,1), d = rnorm(100,5))
+sapply(x, mean)
+
+```
+
+Como vemos, la lista x está compuesta por vectores de diferente longitud, sin
+embargo, **sapply()** es capaz de operar sobre cada uno de los elementos y obtener
+la media para cada caso, devolviendo un vector con nombres. Por su parte, la 
+función **mean()** no puede operar sobre una lista.
+
+```{r mean error}
+mean(x)
+```
+
+Existen otras variantes para la familia de funciones apply, cada una para casos 
+específicos. Con **vapply()**, la diferencia es que podemos indicar explícitamente
+el formato de salida.
+
 ## Utilidades
+En este apartado enumeramos una serie de funciones y procesos que son útiles para
+el día a día en R. Primero veremos algunas funciones matemáticas generales, seguido
+de una introducción a expreciones regulares (regex), que sirven para identificar
+caracteres dentro de una cadena de texto. Finalmente pasamos, de manera general,
+a revisar el formato de trabajo en R para manejar fechas y horas.
 
-# Tidyverse (60 min)
+### Utilidades matemáticas
+La función **abs()** devuelve el valor absoluto de un arreglo numérico de datos.
+```{r abs}
+abs(-5)
+abs(c(-3.65, 4.12, 5.84, -8.26))
+```
+
+La función **round()** redondea los datos de entrada, se puede utilizar el argumento
+**digits** para definir el número de digitos a mostrar.
+
+```{r round}
+round(c(-3.65, 4.12, 5.84, -8.26), digits = 1)
+round(c(-3.65, 4.12, 5.84, -8.26), digits = 0)
+```
+
+Por otra parte, funciones que ya han aparecido previamente en este documento son
+**sum()** y **mean()**, que calculan la suma y media de los datos, respectivamente.
+
+```{r sum mean}
+sum(round(c(-3.65, 4.12, 5.84, -8.26), digits = 2))
+mean(round(c(-3.65, 4.12, 5.84, -8.26), digits = 2))
+```
+El siguiente grupo de funciones corresponde a funciones que son utilizadas 
+comunmente al crear y manipular estructuras de datos.  
+La función **seq()** la hemos visto previamente, sirve para generar una secuencia
+de números, en donde los primeros dos argumentos representan el límite de la 
+secuencia, mientras que el argumento **by** indica los incrementos para realizar
+esa secuencia. Para añadir a lo visto anteriormente, utilizar un número negativo en 
+el argumento **by** genera una serie descendente.
+
+```{r seq2}
+seq(8, 2, by = -2)
+```
+
+Por otra parte, la función **rep()** se utiliza para replicar su input, que 
+generalmente es un vector o una lista. Con el argumento **times** podemos 
+especificar el número de repeticiones a realizar, mientras que el argumento **each**
+repite cada valor seguido del siguiente.
+
+```{r rep}
+rep(c(8, 6, 4, 2), times = 2)
+rep(c(8, 6, 4, 2), each = 2)
+```
+
+La función **str()** da la estructura de un objeto, se puede utilizar para cualquier
+objeto pero es más útil en objetos de varios elementos, como listas o dataframes.
+El siguiente ejemplo nos da la estructura de los elementos de la lista "li", en
+donde el primer elemento es de tipo lógico y contiene un valor TRUE, el segundo
+elemento es de tipo caracter y contiene la cadena de texto "hola", mientras que el
+último elemento es un vector generado por las funciones **seq()** y **rep()** y
+ordenado con **sort()**.
+
+```{r str}
+li <- list(log = TRUE, 
+           ch = "hola", 
+           int_vec = sort(rep(seq(8, 2, by = -2), 
+                              times = 2)))
+str(li)
+```
+Las funciones **is.()** (is punto), sirven para verificar si un objeto es de cierto
+tipo o clase, por ejemplo:
+
+```{r is}
+is.numeric(5)
+is.list(li)
+is.numeric(li)
+```
+Existen muchas más funciones y es probable que la mayoría de las tareas básicas
+que se busquen realizar ya tengan una o más funciones para llevarlas a cabo. Se 
+recomienda entender el objetivo de las tareas a realizar en R, diseñar un algoritmo
+para realizarlas y depués investigar sobre funciones que puedan servir para llevarlo
+a cabo.
+
+### Expresiones regulares (regex)
+Una expresión regular es una secuencia de caracteres y metacaracteres que conforman
+un patrón de búsqueda que se utiliza para empatar con cadenas de texto. Se puede 
+utilizar una expresión regular para checar si cierto patrón existe en un texto, 
+para reemplazar estos patrones con otros elementos o para extraerlos de la cadena.  
+Las regex son particularmente útiles cuando limpiamos datos, se necesita un curso
+específico de regex para comprenderlas por completo, pero podemos ver algunas 
+funciones introductorias y expresiones comunes.
+
+La función **grepl()** sirve para extraer los elementos de un vector de texto que
+cumplen con un patrón. El primer argumento en la función **grepl()** es dicho
+patrón, mientras que el segundo es un vector de caracteres en el cual se buscan 
+las coincidencias. En el ejemplo, buscamos el caracter "a", para encontrar las
+ciudades que lo contienen. Vemos que **grepl()** identifica entre mayúsculas
+y minúsculas, pues devuelve TRUE para Monterrey y FALSE para Tijuana.
+
+```{r grepl basico}
+ciudades <- c("Guadalajara", "Monterrey", "Tijuana", "Acapulco", "Aguascalientes")
+grepl("t", ciudades)
+```
+
+Donde empiezan a ser utilizadas las regex, es al incluir metacaracteres, que son
+caracteres que representan una instrucción en lugar de representar al caracter
+mismo. Por ejemplo, si quisieramos encontrar las ciudades que empiezan con alguna
+letra, debemos utilizar la expresión "^a", mientras que para los elementos que 
+terminan con cierta letra, utilizaremos la expresión "a$".
+
+Con la función **grep()** encontramos un vector de índices, en lugar del vector 
+lógico que devuelve **grepl()** (la "l" al final es por "logical"). La función
+**grep()** devuele un vector de índices que contiene los valores de posción de los
+elementos que contienen el patrón buscado.
+
+```{r grep}
+grep("t", ciudades)
+
+ciudades[grep("t", ciudades)]
+```
+
+Por otra parte, R permite reemplazar ciertos caracteres con otros, para esto se
+utiliza la función **sub()**. Esta función toma tres argumentos: **pattern**, 
+**replacement** y **x**. El primero corresponde a la expresión regular que se
+quiere coincidir y el tercero corresponde al vector de caracteres en donde se
+busca el patrón. El nuevo argumento **replacement**, toma el caracter o cadena de
+caracteres de reemplazo.
+
+```{r sub}
+mosca <- c("una", "mosca", "pegada", "en", "la", "pared")
+
+sub("[aeiou]", "a", mosca)
+```
+
+Como vemos, introdujimos una expresión regular que indica que el patrón es cualquier
+vocal, lo que da la instrucción a R de aplicar el reemplazo de caracteres si es que
+encuentra alguna vocal. En el caso de la palabra "la", R reemplaza una "a" por otra
+"a" tras bambalinas. Es importante notar que **sub()** solamente reemplaza la 
+primer coincidencia en cada elemento del vector, es por eso que en la palabra "pared"
+solamente se reemplaza la primera vocal, mientras que la "e" se mantiende. Esto no
+es notorio con la palabra "pegada", pues reemplazó la primera vocal "e" por una "a"
+y las demás vocales ya eran "a".  
+Para realizar reemplazos sobre todas coincidencias en los elementos del vector, 
+utilizamos la función **gsub()**, que toma los mismos argumnentos que **sub()**.
+
+```{r gsub}
+gsub("[aeiou]", "a", mosca)
+```
+
+### Manejo de fechas
+Finalmente, dentro de las utilidades de R existe el concepto del manejo de fechas y
+horas. Esta información es esencial en el manejo de datos de tráfico pues la demanda
+es dependiente de los meses, semanas, días y horas en que se analiza. R es 
+específicamente útil al realizar series de tiempo para establecer temporalidad y
+estacionalidad.  
+Para esto, R trabaja con fechas y horas en formatos específicos, que le permiten
+interpretar los datos de manera adecuada.
+
+Con la función **Sys.Date()** podemos conocer la fecha actual (si nuestro sistema
+se encuentra correcto), además de ver el formato por defecto de las fechas en R.
+
+
+```{r current date}
+Sys.Date()
+```
+
+El resultado es una cadena de texto que contiene el año, el mes y el día, en ese
+orden, sin embargo, este es un tipo de objeto especial, un objeto "Date". 
+
+```{r}
+class(Sys.Date())
+```
+
+Por otra parte, podemos obtener la hora del sistema, a través de la función 
+**Sys.time()**, la cual devuelve otra cadena de caracteres, esta vez como un objeto
+de tipo POSIXct. POSIX es una convención que permite a los sistemas computacionales
+entender datos de tiempo en diferentes sistemas operativos.
+
+```{r}
+Sys.time()
+
+class(Sys.time())
+```
+
+Para crear un objeto de tipo "Date", utilizamos la función **as.Date()**, que con
+el argumento **format** por defecto, tiene que estar escrita en el formato mostrado
+anteriormente, que es el formato por defecto de R.  
+Para procesar series de tiempo, no es necesario modificar el formato de representación
+de las fechas, sin embargo, puede ser de utilidad realizar adecuaciones al formato
+para realizar diferentes visualizaciones, por ejemplo, mostrar el formato que 
+utilizamos en México: día/mes/año.
+
+```{r dates} 
+mi_fecha <- as.Date("1988-10-01")
+mi_fecha2 <- as.Date("01/10/1988", format = "%d/%m/%Y")
+
+mi_fecha
+mi_fecha2
+```
+
+Por su parte, para crear un objeto de tipo POSIXct colocamos toda la cadena de 
+caracteres con el formato que R espera, o utilizando el argumento **format** para
+establecer el formato de entrada.
+
+```{r time}
+mi_hora <- as.POSIXct("1988-10-01 10:00:00")
+mi_hora
+```
+
+Es posible realizar operaciones sobre ambos tipos de objetos, en el caso del 
+objeto "Date", utilizan como unidad los días, así que si sumamos 1 a la fecha,
+esta se incrementará en un día. Por su parte, los objetos "POSIXct" tienen a los
+segundos como unidad, así que para sumar una hora hay que incrementar el valor en
+3600.
+
+```{r aritmetica}
+mi_fecha + 1
+mi_fecha + 365
+mi_hora + 1
+mi_hora + 3600
+```
+
+\newpage
+# Tidyverse
+Tidyverse es una colección de paquetes de R diseñado para la ciencia de datos, 
+todos los paquetes dentro del Tidyverse comparten una misma filosofía, gramática
+y estructura. Cuando se instala y se carga la librería, se cargan principalmente 8 librerías
+más, que son *dplyr*, *ggplot2*, *readr*, *forcats*, *tibble*, *stringr*,
+*tidyr* y *purr*. En conjunto, estos paquetes se utilizan para la importación,
+manipulación y visualización de datos.  
+En este capítulo, realizaremos análisis y procesos con el Censo de Población de 
+INEGI que abordamos en capítulos anteriores.
+
 ## Manejo de datos
+En este capítulo realizaremos tres procesos sobre una tabla, dos que ya hemos
+visto antes: filtrar datos de una tabla y ordenarlos en un arreglo deseado. El 
+tercer proceso es uno de los más importantes en R, particularmente en *tidyverse*,
+**mutate()**.
+
+### Datos
+
+Los datos que utilizaremos serán los del censo, pero está vez se encuentran en la
+carpeta "data" del proyecto, en lugar de descargarlos con el paquete *importinegi*
+los importaremos con *readr*, que es parte del *tidyverse*.
+
+```{r read censo}
+library(tidyverse)
+censo <- read_csv("data/censo.csv")
+```
+
+Como vimos previamente, podemos hacer una revisión rápida de la estructura de la 
+base de datos. Con la función **str()** podemos observar su estructura (no se 
+imprime en este documento por espacio).
+
+```{r str 2, eval = FALSE}
+str(censo)
+```
+
+Viendo la estructura, podemos ver que la mayoría de las variables se importaron
+como "caracter", esto debido a que estas columnas contienen un "*", como criterio
+de confidencialidad, se refiere a AGEBs y manzanas con menos de tres unidades, por
+lo que solo se presentan los datos agregados.
+
+Lo primero que podemos observar es que el dataframe está compuesto por datos
+para manzanas, AGEBs, municipios y estados, pero también incluye los totales.
+Lo anterior nos puede perjudicar pues al realizar procesos y visualizaciones, 
+se agragaran los totales y estaremos sumando dos o más veces las cantidades.  
+Podemos identificar que las columnas que agregan estos totales tienen identificador
+"000", que son las variables "LOC" por localidad, "MZA" que corresponde a las 
+manzanas y "AGEB".
+
+```{r manzana y ageb}
+head(censo)[5:8]
+```
+
+### Función **filter()**
+Por lo anterior, conviene filtrar las observaciones que tienen estos identificadores
+para continuar con el trabajo. En este momento vale la pena introducir el operador
+**%>%**, conocido como "pipe". Este operador nos permite escalonar funciones, para
+ahorrar pasos al momento de escribirlas. Con la sintáxis de la función **filter()** 
+podemos omitir el primer argumento, ya que se lo estamos alimentando a través del
+pipe. Hasta este momento no es muy evidente el beneficio pero posteriormente será 
+más obvio.
+
+```{r filtro censo}
+censo_filtro <- censo %>% 
+  filter(MZA != "000")
+```
+
+El resultado del filtro se almacena en la variable correspondiente, filtramos 
+todos los elementos en donde la variable "MZA" no es igual a tres ceros, recordando
+que la variable está almacenada como caracter, por lo cual agregamos las comillas.
+
+Cabe destacar que para el caso de números identificadores, es conveniente mantenerlas
+como caracter, para evitar ordenamientos indeseados en el caso de tener ceros a la
+izquierda.
+
+Es posible realizar filtros de dos o más variables, por ejemplo, podemos generar
+una base de datos de población de manzanas y AGEBs para la alcaldía Xochimilco.
+
+```{r filtro dos o más}
+censo_xochi <- censo %>% 
+  filter(MZA != "000", NOM_MUN == "Xochimilco")
+```
+
+### Función **arrange()**
+Previamente exploramos la función **sort()**, que ordena un vector de manera 
+ascendente o descendente. Ahora añadiremos la función **arrange()** que sirve
+para ordenar observaciones dentro de un dataframe de acuerdo a el contenido de
+una varible. Con la función **desc()** ordenamos de mayor a menor.  
+
+
+```{r arrange}
+censo_arrange <- censo %>% 
+  arrange(desc(POBTOT))
+```
+
+Por otra parte, podemos aprovechar para recordar la utilidad de la función **select()**
+para seleccionar solo tres variables y verificar que el orden se realizó de manera
+correcta. A su vez, realizamos el orden sobre el objeto censo original para mostrar
+que las filas de totales distorsionan la información. Asimismo, en el siguiente 
+código utilizamos un doble pipe, para imprimir solamente los primeros 5 resultados
+a través de la función **head()**. Es de notar que de esta forma, el objeto de entrada
+**censo_arrange** se escribe una sola vez, se realizan las operaciones de la función
+**select()** y el resultado de este proceso se convierte en el input de la siguiente
+función en el pipe.
+
+```{r select con pipe}
+censo_arrange %>% 
+  select("NOM_MUN", "AGEB", "POBTOT") %>% 
+  head(5)
+```
+
+Con lo anterior, podemos generar una base que contenga las variables necesarias
+para trabajar, filtrando las observaciones que no son totales y ordenando de mayor
+a menor.
+
+```{r filter y arrange}
+censo_cdmx <- censo %>% 
+  filter(MZA != "000") %>% 
+  arrange(desc(POBTOT)) %>% 
+  select("NOM_MUN", "AGEB", "MZA", "VIVTOT", "POBTOT", "POBMAS", "POBFEM", "PNACENT",
+         "PNACOE", "P3YM_HLI", "P3HLINHE")
+```
+
+### Función **mutate()**
+La función **mutate()** se utiliza para transformar el contenido de una variable o
+crear una variable nueva, basado en operaciones y procesos de otras variables (o de
+sí misma) dentro del dataframe.  
+Para ejemplificar, podemos realizar algunos cálculos sobre los datos que separamos,
+como por ejemplo, el porcentaje de la población femenina en cada AGEB, o el porcentaje
+de la población que habla alguna lengua índigena. Para realizar lo anterior, es
+necesario convertir las variables a operar en variables numéricas.
+
+Podemos observar que dentro de la selección que hicimos, todavía existen algunas
+variables con asteriscos, y a su vez sabemos que esto significa que en ese rubro 
+existen tan pocos datos, que no se muestran por confidencialidad. Por lo que es
+válido, en este caso, cambiarlos por ceros.  
+Existen varias formas de realizar este proceso, sin embargo, para utilizar solamente
+las funciones que hemos visto hasta el momento, podemos generar dos bases de datos,
+una que contenga las variables descriptivas y otra que contenga las variables 
+numéricas.
+
+Si le indicamos a la función **select()** las variables a seleccionar, se genera
+una nueva tabla con las mismas, a su vez, con esas mismas variable podemos indicar
+el negativo de ese vector, lo que seleccionará todas **excepto** esas variables.
+
+```{r doble select}
+censo_cdmx_id <- censo_cdmx %>% 
+  select("NOM_MUN", "AGEB", "MZA")
+
+head(censo_cdmx_id, 1)
+
+censo_cdmx_datos <- censo_cdmx %>% 
+  select(-c("NOM_MUN", "AGEB", "MZA"))
+head(censo_cdmx_datos, 1)
+
+
+```
+
+Para remover los asteriscos, podemos utilizar la función **gsub()**, que nos
+permitirá reemplazarlos por el caracter que necesitemos, en este caso colocamos 
+el cero. Para esto, usamos **sapply()** para aplicar la función **gsub()** a cada
+columna de la base de datos, lo que nos devuelve una matriz, aprovechamos para 
+convertir todos los datos en numéricos con **as.numeric()** y despúes hacemos un 
+pipe para convertir esa matriz en un dataframe con **as.data.frame()**.
+
+```{r quitar asteriscos}
+censo_cdmx_num <- sapply(censo_cdmx_datos, function(y) as.numeric(gsub("\\*", "0", y))) %>% 
+  as.data.frame()
+```
+
+Vemos que la función para convertir en números introdujo NAs en los casos en
+donde no es posible identificar un valor numérico, esto corresponde a registros 
+que en la base se identifican como "N/D", R los convierte en NA, que en inglés
+significa lo mismo, así que no tenemos que hacer transformaciones adicionales,
+más adelante veremos como trabajar con este tipo de registros faltantes.
+
+Finalmente, utilizamos la función **cbind()** para volver a colocar las columnas
+en el mismo dataframe.
+
+```{r censo bind}
+censo_cdmx_bind <- cbind(censo_cdmx_id, censo_cdmx_num)
+str(censo_cdmx_bind)
+```
+
+Una forma alternativa de quitar los asteriscos en un solo paso sin separar las
+bases de datos, es la siguiente, sin embargo, contiene algunos operadores que no
+han sido mencionados hasta ahora, como los corchetes vacíos y el punto.
+
+```{r quitar asteriscos 2, eval = FALSE}
+censo_cdmx[] <- censo_cdmx %>% 
+  lapply(., function(x) gsub("\\*", "0", x))
+```
+
+Ahora que tenemos una base trabajable, trabajémosla. Utilizando la función **mutate()**
+podemos realizar operaciones y aplicar funciones a las variables dentro del dataframe.
+En este caso, empecemos con estimar una nueva columna, que contenga la proporción de 
+población femenina en cada manzana. Para esto, necesitamos declarar el nombre de la
+nueva columna dentro de la función, seguido por un signo de igual para después colocar
+la operación a realizar. En este momento cabe mencionar la importancia de no utilizar
+el signo de igual para declarar variables, ya que es utilizado por requisito en
+este tipo de funciones.
+
+```{r relación de población}
+censo_cdmx_bind %>% 
+  mutate(pct_fem = POBFEM / POBTOT) %>% 
+  head(5)
+```
+Con lo anterior hemos estimado la proporción de población femenina por manzana en
+la Ciudad de México, sin embargo, podría ser interesante para las visualizaciones
+mostrar este dato en porcentajes, por lo que con la misma función realizamos la
+tranformación.
+
+```{r mutate porcentaje}
+censo_cdmx_bind %>% 
+  mutate(pct_fem = paste(round(POBFEM / POBTOT * 100,2), "%")) %>% 
+  head(5)
+```
+Aunque esto no es realmente recomendable, pues veremos más adelante que el formato
+de la visualización puede alterarse dentro de la grámatica del gráfico, pero es una
+demostración de la funcionalidad de **mutate()**.
+
 ## Visualización
+Hasta este punto, hemos realizado análisis sobre tablas y valores, sin embargo,
+una parte importante de la comunicación de resultados es la creación de 
+visualizaciones atractivas e informativas. R cuenta con la función **plot()** que
+puede crear visualizaciones rápidas y que es capaz de determinar el tipo de gráfico
+a generar de acuerdo con las variables que se le suministran.
+
+Por ejemplo, si el input es una variable de tipo factor, **plot()** generará un
+histograma. Sin embargo, este tipo de gráfico no es útil para representar los datos
+de población, el resultado del gráfico es el número (cuenta) de manzanas en cada
+alcaldía.
+
+```{r histo alcaldías}
+censo <- censo_cdmx_bind
+plot(factor(censo$NOM_MUN))
+```
+
+Por otra parte, si el input son dos variables numéricas, la visualización generada
+será un gráfico de puntos (scatterplot). En el siguiente ejemplo, podemos ver la
+relación de población femenina vs población masculina.
+
+```{r scatter fem mas}
+plot(censo$POBFEM, censo$POBMAS)
+```
+
+Para forzar la visualización de un histograma, podemos utilizar la función 
+**hist()**.
+
+```{r hist}
+hist(censo$POBTOT)
+```
+
+En este caso, se genera un histograma que contiene la población en cada una de las
+manzanas, sin embargo, muchas de ellas tienen población cero o muy pequeña, por lo que
+conviene realizar agrupaciones en las variables del dataframe. 
+A su vez, la librería *gplot2* (parte del tidyverse) se creó para permitir el uso
+de la agrupación y síntesis en la creación de gráficos que siguen una gramática
+específica en la escritura del código.  
+
+En las próximas dos secciones se desarrollan las funciones necesarias para generar
+síntesis desde un dataframe y generar visualizaciones que permiten más control del
+usuario.
+
 ## Agrupación y síntesis
+Los análisis de datos usualmente oinvolucran varios pasos para realizar transformaciones y visualizaciones de datos, así como otros componentes en el
+flujo de trabajo, como la modelación de datos, que se no se verá en este curso.
+Hemos visto que con la función **filter()** podemos extraer observaciones individuales o grupos de observaciones. En esta sección mostramos como convertir
+una serie de observaciones en una sola.
+
+La función **summarise()** permite aplicar una función y generar una síntesis a una
+o varias variables. De esta forma, podemos generar la suma de la población en toda la Ciudad de México, con el siguiente código:
+
+```{r suma total} 
+censo %>% 
+  summarise(POBTOT = sum(POBTOT))
+```
+La sintáxis de la función es parecida a la de **mutate()**, en donde se alimenta
+el nombre de la variable resultante, seguido de las operaciones o funciones que
+se aplicarán a los datos. 
+Lo anterior no suena tan crucial cuando se trata de una variable, pero es posible
+realizar síntesis de diversas variables y aplicando diferentes funciones.
+
+```{r suma y media}
+censo %>% 
+  summarise(POBTOT = sum(POBTOT),
+            MEDIA_FEM = mean(POBFEM))
+
+```
+
+La función **summarise()** devuelve un valor que resulta de la síntesis de una o
+varias variables de acuerdo a la función indicada. Sin embargo, puede ser conveniente
+realizar la síntesis por grupos. Lo anterior es parecido al concepto de tablas 
+dinámicas en excel, en donde podemos realizar operaciones a los valores de acuerdo 
+con variables categóricas. La información del censo funciona para este ejemplo
+pues podemos obtener la población por alcaldía, al agruparlas y generar la suma.
+
+```{r group sum}
+censo %>% 
+  group_by(NOM_MUN) %>% 
+  summarise(POBTOT = sum(POBTOT))
+```
+
+El código previo genera un dataframe nuevo, que solo contiene la variable 
+agrupada y la síntesis del valor seleccionado.
+
+Con lo anterior, utilizando *ggplot2* podemos generar visualizaciones más atractivas y sobretodo, informativas.
+Como introducción a esta librería, tenemos la siguiente visualización
+generada con una gramática específica, que veremos en la siguiente sección. 
+
+```{r intro ggplot2, echo = FALSE}
+censo %>% 
+  ggplot() +
+  geom_point(aes(x = VIVTOT, y = POBTOT))
+```
+
 ## Tipos de visualización
+Utilizando *ggplot2*, podemos generar el gráfico mostrado anteriormente, que con la sintáxis y la gramática propias del código, nos permite tener más control sobre el resultado.
 
-# Union de datos (60 min)
+Primero, el input de la función **ggplot()** se compone de la serie 
+de datos, las aesthetics (estéticas) que indican la forma de representar a las variables y pueden ser diferentes de acuerdo con el tipo de gráfico. Lo anterior seguido de una geometría, que define el tipo de representación a mostrar.  
+
+Por último, hay que notar que cada elemento del gráfico se agrega con un signo **+**.
+
+```{r ggplot 1}
+ggplot(censo, aes(x = VIVTOT, y = POBTOT)) +
+  geom_point()
+```
+
+Otra forma de escribir la misma instrucción, y que funciona como convención, especialmente cuando ponemos varias geometrías, es utilizar el operador pipe y colocar las estéticas dentro de los argumentos de la geometría. En resumen, el código anterior utilizaría
+las variables x y y en todas las geometrías consecuentes, mientras que el código siguiente solamente utilizará estas variables para realizar la gráfica de puntos.
+
+```{r ggplot 2}
+censo %>% 
+  ggplot() +
+  geom_point(aes(x = VIVTOT, y = POBTOT))
+```
+
+Otro tipo de gráfico es el de barras, que tiene dos geometrías relacionadas, la primera **geom_bar()**, genera un gráfico que toma una variable categórica en "x" y dibuja en forma de barras el número de apariciones de esa variable (conteo), en ese sentido, es lo mismo que la visualización que realizamos previamente con la función **plot()**. La otra geometría asociada es **geom_col()** (de columnas), en donde además de la variable "x", podemos incluir una variable "y" que indique los valores incluidos en esta variable.
+
+```{r geom_col}
+censo %>% 
+  group_by(NOM_MUN) %>% 
+  summarise(POBTOT = sum(POBTOT)) %>% 
+  ggplot() +
+  geom_col(aes(x = NOM_MUN, y = POBTOT))
+```
+
+Un componente adicional de las visualizaciones es el tema. Utilizando diferentes gramáticas de temas, podemos modificar la estética del gráfico, en este caso, podríamos modificar la dirección o el tamaño del texto en el eje x, pero probablemente sería más fácil leer todo el gráfico si cambiamos la dirección de las barras, lo que se puede lograr añadiendo la función **coord_flip()**, que invierte las variables del plano.
+
+```{r coord_flip}
+censo %>% 
+  group_by(NOM_MUN) %>% 
+  summarise(POBTOT = sum(POBTOT)) %>% 
+  ggplot() +
+  geom_col(aes(x = NOM_MUN, y = POBTOT)) +
+  coord_flip()
+```
+
+Dentro de las aestethics, podemos agregar algunas más, que son propiedades del gráfico que pueden tomar en cuenta otras variables. Para esto, podemos generar otra variable basada en el porcentaje de de personas nacidas en la entidad, realizamos una síntesis a las variables requeridas, utilizando **summarise_at()**, que es una variante de **summarise()** que permite seleccionar muchas variables a la vez y aplicarles una función, además hace posible indicarle que no contemple los registros "NA". Es seguida realizamos un **mutate()** para estimnar los porcentajes, y el resultado lo pasamos directamente a **ggplot()**.  
+El resultado del porcentaje de personas nacidas en la entidad, lo pasamos a la estética **fill**, que define una escala de colores que puede ser discreta o continua (como en este caso) con el color de relleno de las barras. Finalmente, utilizando la función reorder dentro de la variable x, reordenamos las barras con base en la población total, que es la variable que estamos visualizando.
+
+```{r fill}
+censo %>% 
+  group_by(NOM_MUN) %>% 
+  summarise_at(vars(VIVTOT, POBTOT, PNACENT), sum, na.rm = TRUE) %>% 
+  mutate(PCT_NACENT = PNACENT / POBTOT) %>% 
+  ggplot() +
+  geom_col(aes(x = reorder(NOM_MUN, POBTOT), y = POBTOT, fill = PCT_NACENT)) +
+  coord_flip()
+```
+
+
+\newpage
+# Importación y Unión de datos
+En este capítulo 
+En este capítulo revisamos la importación de datos en forma de dataframes y el
+manejo de la unión de tablas.  
+
+## Importación de datos
+Además de poder importar datos en formato .csv, R es capaz de manejar una gran
+variedad de archivos, incluyendo archivos de Excel, archivos espaciales como 
+shapefiles, Google Earth, imágenes, etc. Casi cualquier archivo puede ser manejado
+dentro de R con la librería adecuada. 
+
+### Archivos de excel
+Para importar un archivo de excel, la librería básica es *readxl*, con la cual
+podemos utilizar la función **read_excel()** y con un archivo bien estructurado, 
+no necesita argumentos más que la ruta y el nombre del archivo.
+
+```{r read excel}
+library(readxl)
+
+copexa <- read_excel("data/COPEXA_ejemplo.xlsx")
+
+```
+
+La tabla anterior contiene datos históricos desde 2013 para unos activos carreteros,
+y utilizando lo que hemos visto hasta ahora, podemos generar la tabla de Tránsito
+Diario Promedio Anual. Primero convertimos la columna "fecha" a un objeto Date,
+en seguida extraemos el año de esta columna, generamos la agregación por tipo de
+vehículo, agrupamos por activo y año, y luego sumamos el total y lo dividimos 
+entre el total de valores en cada año.
+
+```{r}
+copexa$fecha <- as.Date(copexa$fecha)
+
+copexa_tpda <- copexa %>% 
+  mutate(year = format(fecha, format = "%Y")) %>% 
+  mutate(auto = A1 + AUTO + A2_1 + A2_2 + A2_3_,
+         bus = B2 + B3 + B4,
+         cu = CU2 + CU3 + CU4,
+         ca1 = CA1_5 + CA1_6,
+         ca2 = CA2_7 + CA2_8 + CA2_9 + CA2_10__) %>% 
+  group_by(activo, year) %>% 
+  summarise(A = sum(auto)/n(),
+            B = sum(bus)/n(),
+            CU = sum(cu)/n(),
+            CA1 = sum(ca1)/n(),
+            CA2 = sum(ca2)/n())
+
+copexa_tpda
+
+```
+
+Además de contener información sobre el tráfico en los activos carreteros, la base de datos "copexa" también contiene los registros de ingresos en las casetas de cobro. Por lo que con unas líneas de código muy parecidas, podemos obtener el resumen de ingresos anuales.
+
+```{r ingresos}
+copexa_ing <- copexa %>% 
+  mutate(year = format(fecha, format = "%Y")) %>% 
+  mutate(auto = ING_A1 + ING_AUTO + ING_A2_1 + ING_A2_2 + ING_A2_3_,
+         bus = ING_B2 + ING_B3 + ING_B4,
+         cu = ING_CU2 + ING_CU3 + ING_CU4,
+         ca1 = ING_CA1_5 + ING_CA1_6,
+         ca2 = ING_CA2_7 + ING_CA2_8 + ING_CA2_9 + ING_CA2_10__) %>% 
+  group_by(activo, year) %>% 
+  summarise(A = sum(auto),
+            B = sum(bus),
+            CU = sum(cu),
+            CA1 = sum(ca1),
+            CA2 = sum(ca2))
+
+copexa_ing
+```
+
+En este caso, cambiamos las variables, para utilizar las que corresponden a los ingresos en lugar del aforo, además de mantener solamente la suma de ingresos, ya que estos no se ponderan por los días del año.
+
 ## Unión interna
+Cuando tenemos datos en diferentes tablas, que pueden tener una relación entre ellos, podemos realizar uniones y generar nuevos grupos de datos. Esta acción es homóloga a las búsquedas verticales en Excel, en donde buscamos un valor en común entre dos tablas y lo pegamos en una de ellas.  
+Los **joins** en R tienen una serie de posibilidades y alternativas que mejoran la funcionalidad respecto a las búsquedas en Excel. En primer lugar, nos permite traer todas las columnas de la segunda tabla en una sola operación (o en su caso seleccionar cuales unir). A su vez, nos permite mantener rastraebilidad sobre las columnas unidas, identificando las que pertenecen a una y otra.
+
+En este caso, las dos tablas generadas previamente se pueden unir para tener la información en una sola, a través de la función **inner_join()**, pero también se pudo generar la agrupación y síntesis en un solo paso. Lo anterior dependerá de la conveniencia y propósito de los procesos. Por ejemplo, puede convenir separar los resultados de tráfico para los procesos de modelación y los resultados de ingresos para análisis financieros.
+
+```{r union fake}
+copexa_resumen <- inner_join(copexa_tpda, copexa_ing)
+
+copexa_resumen
+```
+
+Como vemos, R selecciona todas las variables que coinciden para realizar la unión. En este caso, por como se generaron las tablas, todas las variables coinciden, lo cual provoca que se genere una tabla vacía. Sin embargo, tenemos control para seleccionar la base de variables de búsqueda.
+
+```{r union real}
+copexa_resumen <- inner_join(copexa_tpda, copexa_ing, 
+                             by = c("activo", "year"))
+
+copexa_resumen
+```
+
+El resultado anterior genera una tabla que verifica el activo y el año y después realiza la unión de todos los datos entre ambas tablas que coinciden con esa búsqueda, como las variables tienen el mismo nombre (aunque diferente contenido) en las dos tablas, R asigna sufijos que en este caso con "x" y "y", a la primera y segunda tabla, respectivamente.  
+Dentro de la función **inner_join()**, además del argumento **by**, tenemos el argumento **suffix**, con el cual podemos definir manualmente los sufijos que R utilizará para identificar la información de cada tabla, en este caso podemos utilizar el sufijo "_tpda" para la tabla de aforos y "_ingreso" para la tabla de ingresos.
+
+```{r join final}
+copexa_resumen <- inner_join(copexa_tpda, copexa_ing, 
+                             by = c("activo", "year"), 
+                             suffix = c("_tpda", "_ingreso"))
+
+copexa_resumen
+```
+
 ## Uniones izquierda y derecha
+Las uniones internas, a través de la función **inner_join()** devuelven solamente las observaciones con coincidencias en ambas tablas. En el caso del ejemplo utilizado, sabemos que ambas tablas
+tendrían coincidencias para todos los valores, por lo que no se perdió información.  
+Sin embargo, es posible requerir búsquedas que devuelvan valores faltantes, para lo cual podemos utilizar otros tipos de uniones.
+
+La función **left_join()** mantiene todas las variables de la primer tabla, que correspondería al argumento x, y devuelve los valores de la tabla y que coincidan, colocando valores faltantes o *NA* en las observaciones no encontradas. La función **right_join()** hace lo mismo que la anterior, pero manteniendo todos los valores de y.
+Así, podemos decir que:
+
+```{r, eval = FALSE}
+
+left_join(x, y) = right_join(y, x)
+
+```
+
 ## Otras uniones
+Finalmente, otras funciones para unión de tablas que son muy útiles son **full_join()** y **anti_join()**. 
 
-# Visualización de datos (90 min)
+En el caso de la primera, **ful_join()**, permite mantener todos los valores de ambas tablas, y colocar *NAs* en la tabla x cuando la búsqueda aparezca solo en y, así como en la tabla y cuando la búsqueda aparezca solo en x, mientras que todos los argumentos coincidentes se mantienen. En resumen, es como la combinación de **inner_join()**, **left_join()** y **right_join()**.
+
+Para la segunda, **anti_join()**, R encontrará los elementos de la primera tabla que no aparezcan en la segunda.
+
+\newpage
+# Visualización de datos
+Como vimos brevemente en capítulos previos, la visualización es parte importante del análisis de datos. Plasmar la información de manera visual permite a los analistas identificar patrones en la información que pueden indicar que acciones tomar con los datos para procesarlos y generar resultados que añadan valor.
+
 ## Gramática de los gráficos
-## Estéticas
-## Geometrías
-## Temas
+La base de la generación de visualizaciones en *ggplot2* es la grámatica de 
+los gráficos. Una especie de sub-lenguaje que se desarrolló para definir los
+diversos componentes de un gráfico. Los componentes de las visualizaciones
+realizadas con *ggplot2* se encuentran en capas, en donde cada una alberga
+diferentes elementos que le indican a R qué dibujar y cómo dibujarlo.
 
-# Modelos de regresión (90 min)
+Los tres principales elementos de una visualización realizada con *ggplot2* son
+los datos, las estéticas o mapeo y las geometrías. Además, existen otros elementos
+que pueden ayudar a complementar el gráfico. En este curso, veremos los primeros
+tres, así como una introducción a los temas.
+
+Elemento | Descripción
+---- | ----
+Data | Los datos a graficar
+Aesthetics | Las escalas en las cuales mapeamos los datos
+Geometries | Los elementos visuales de los gráficos
+
+Elemento | Descripción
+---- | ----
+Themes | La "tinta" no relacionada con los datos
+Statistics | Representaciones de los datos para ayudar la comprensión
+Coordinates | El espacio en el cual se realizará la visualización
+Facets | Sirve para graficar pequeños múltiplos
+
+Como vimos brevemente, la estructura de una visualización en *ggplot2* es como
+se presenta a continuación:
+(Por cierto, el nombre de **ggplot** viene de "grammar of graphics plot")
+
+```{r ggplot intro, eval = FALSE}
+ggplot(data, aes(x = map_x, y = map_y)) +
+  geom_point()
+```
+
+En el anterior bloque, tenemos la llamada a la función **ggplot()**, en la cual
+alimentamos el objeto con los datos que contienen las variables que vamos a 
+graficar, seguido por las variables a mapear. Estas variables se incluyen
+dentro del argumento **aes()** (aesthetics). Después con el operador **+** 
+agregamos la geometría, que debe adaptarse a los datos a graficar. 
+
+En este punto, cabe mencionar que existen varios tipos de geometrías, que pueden
+ser puntos, líneas, barras, boxplots, etc. En el siguiente enlace se encuentran
+las principales geometrías con las que trabaja *ggplot2* y sus parámetros.
+
+Los parámetros son modificadores que pueden trabajar con valores o incluso con
+variables, y ayudan a generar visualizaciones más explicativas. Por ejemplo, el
+parámetro **color** puede recibir el nombre de una variable de tipo factor y
+dibujar de diferente color cada punto de acuerdo con su categoría. Por otra parte, 
+si se mapea una variable numérica a este parámetro, se genera una gama de colores
+continua.
+
+A continuiación vemos un ejemplo clásico, utilizando la base de datos **mtcars** 
+incluida en R, que describe características de automóviles como millas por 
+galón, tamaño del motor, número de velocidades, etc. Para aprovechar, 
+utilizamos la sintáxis de dplyr con el operador **%>%**.
+
+```{r mpg}
+mtcars %>% 
+  ggplot(aes(wt, mpg, color = factor(cyl))) +
+  geom_point()
+```
+
+## Estéticas
+El elemento conocido como aesthetics funciona para definir una serie de parámetros
+visuales a los cuales se les asignará una variable. En el caso más elemental de
+un gráfico, mapeamos o asignamos una variable a la estética **x** y otra variable 
+a la estética **y**. Sin embargo, como vimos, es posible asignar variables a
+otras estéticas visibles como color, relleno (fill), tamaño (size), forma (shape),
+transparencia (alpha), entre otras. Muchas geometrías comparten nombres de 
+estéticas visibles con sus parámetros, por lo que puede ser fácil confundirse al
+momento de definirlos. La diferencia la hace en donde colocamos la definición del
+argumento, dentro o fuera del argumento **aes()**, como vemos en el siguiente ejemplo.
+
+```{r aes}
+mtcars %>% 
+  ggplot(aes(wt, mpg, size = cyl)) +
+  geom_point()
+
+mtcars %>% 
+  ggplot(aes(wt, mpg), size = cyl) +
+  geom_point()
+```
+
+Como vemos, el segundo caso no produjo un cambio en el tamaño de los puntos de 
+acuerdo con el cilindraje de los vehículos, ya que al estar fuera del argumento
+**aes()**, no puede mapear los valores de la variable. Sin embargo, es posible
+cambiar el parámetro para todos los puntos asignando un valor. Por ejemplo, 
+utilizando el parámetro **alpha**, podemos tener un valor fijo o variable, de 
+acuerdo en donde coloquemos el argumento.
+
+```{r alpha}
+mtcars %>% 
+  ggplot(aes(wt, mpg, alpha = cyl/100)) +
+  geom_point()
+
+mtcars %>% 
+  ggplot(aes(wt, mpg)) +
+  geom_point(alpha = 0.5)
+```
+
+De ahora en adelante, veremos que otra convención es colocar los elementos de la
+geometría dentro del argumento de la misma, lo que nos permite mapear diferentes
+variables en caso de utilizar varias geometrías, como se muestra en el siguiente
+ejemplo:
+
+```{r muchos geoms, eval = FALSE}
+mtcars %>% 
+  ggplot() +
+  geom_point(aes(wt, mpg, color = factor(cyl)))
+```
+
+## Geometrías
+Las geometrías en esencia definen como se verá el gráfico. Como se mencionó 
+anteriormente, existen actualmente alrededor de 50 geometrías, y se puede
+acceder a cada una de ellas utilizando el prefijo **geom_** correspondiente.
+
+Durante el curso, hemos utilizado diversas geometrías, incluso establecimos la 
+base de muchas de ellas.
+
+La geometría que puede considerarse básica es **geom_point()**, que ya vimos. 
+Sin embargo, en este momento podemos introducir una base de datos relacionada con
+los resultados de un modelo de transporte realizado en Visum. Para validar la
+calibración del modelo, realizamos el análisis de tiempos observados contra tiempos
+modelados y analizamos la R resultante del ajuste lineal de los datos.
+
+```{r tiempos calibrados}
+tiempos_calibracion <- read_excel("data/tiempos_calibracion.xlsx")
+
+tiempos_calibracion %>% 
+  ggplot(aes(TPOS_OBS, TPOS_MOD)) +
+  geom_point(aes(color = VEL_19)) +
+  geom_smooth(method = "lm")
+```
+
+Aquí, agregamos la geometría **geom_smooth()** con el argumento **method = "lm"**,
+que calcula y dibuja la línea de regresión lineal de los datos. Por otra parte, 
+adelantando unos capítulos del siguiente nivel de este curso, podemos extraer la 
+R cuadrada al realizar el análisis del modelo de regresión lineal de la siguiente
+manera:
+
+```{r lm1}
+ml = lm(TPOS_OBS~TPOS_MOD, data = tiempos_calibracion) 
+
+summary(ml)$r.squared 
+```
+
+Otra visualización importante son los histogramas, para el caso de la base de datos
+de tiempos observados y modelados, tenemos una variable que refiere a la velocidad
+de la vía. Podemos generar un histograma de velocidades que nos indique la 
+distribución de las mismas en la red.
+
+```{r hist vel}
+tiempos_calibracion %>% 
+  ggplot() +
+  geom_histogram(aes(VEL_19))
+```
+Como vemos, R selecciona el número de "cajas" a utilizar, que viene predefinido 
+en 30. Sin embargo, podemos modificar este número al definirlo manualmente, o 
+declarando el rango de cada una de estas cajas. La intención es que no queden
+espacios en blanco, ya que esto significa que no tenemos datos para ese rango
+específico de velocidad. Con esto vemos que las velocidades se concentran entre
+los 75 y 80 km/h.
+
+```{r binwidth}
+tiempos_calibracion %>% 
+  ggplot(aes(VEL_19)) +
+  geom_histogram(binwidth = 10)
+```
+
+Por otra parte, podemos utilizar algunos parámetros que aplican para este tipo de
+visualización, que hace transformaciones estadísticas en los datos (en este caso
+un conteo). Utilizando la base de datos de aforos del proyecto Corredor Perote - 
+Xalapa que vimos previamente, generamos el histograma de volúmenes de autos. A su vez,
+al definir la estética **fill** con la variable **activo**, podemos generar dentro
+de la misma visualización, dos histogramas independientes, y con el parámetro 
+**position = "dodge"** le indicamos a R que dibuje las barras separadas.
+
+```{r histo copexa}
+copexa %>% 
+  ggplot(aes(AUTO, fill = activo)) +
+  geom_histogram(position = "dodge")
+```
+En este caso el gráfico nos dice el conteo de días que presentaron cierto número
+de vehículos. Se observa que en el Libramiento de Xalapa el aforo está concentrado
+alrededor de los 1200 -1500 vehículos, mientras que en la Autopista Perote - Banderilla
+se concentra cerca de los 3000 vehículos. Esto es consistente con el análisis de
+TPDA que realizamos previamente. Sin embargo, sabemos que estos datos crecen con
+el paso del tiempo, por lo que también podríamos agregar otra variable (año) y 
+mapearla a otra estética visible.
+
+Los histogramas a su vez, dentro de la lógica de R, son una variante de la geometría
+**geom_bar()**, que es un gráfico de barras con conteos, aunque también existe 
+**geom_col()**, que presenta un gráfico de barras con los datos actuales de las variables. 
+El gráfico de barras, a diferencia del histograma, no agrupa en "cajas" por defecto 
+y es mucho más efectivo cuando la variable mapeada a x es categórica. El mismo 
+gráfico que realizamos en el histograma replicado con **geom_bar()** resulta
+como sigue:
+
+```{r barras}
+copexa %>% 
+  ggplot(aes(AUTO, fill = activo)) +
+  geom_bar()
+```
+
+Por lo que este tipo de gráfico funciona mejor para mostrar conteos de variables
+categóricas. Utilizando el dataframe de tiempos de calibración, podemos generar
+un conteo de los tipos de enlaces que se presentan en el modelo.
+
+```{r}
+tiempos_calibracion %>% 
+  ggplot(aes(TYPE_LINK)) +
+  geom_bar()
+```
+
+Lo anterior también puede ser útil al analizar encuestas origen - destino, ya que
+podríamos contabilizar las respuestas de una categoría, por ejemplo el motivo del
+viaje.
+
+Finalmente, la geometría **geom_col()** nos permite visualizar los valores 
+contenidos dentro de una variable, también utilizando una variable categórica en
+el eje x. Este ejercicio lo hicimos previamente en el censo, y podemos repetirlo
+con la información de COPEXA.
+
+```{r copexa tpda}
+copexa %>% 
+  mutate(year = format(fecha, format = "%Y")) %>% 
+  ggplot(aes(year, AUTO, fill = activo)) +
+  geom_col()
+```
+
+De esta forma, vemos que previamente utilizamos las funciones **group_by()**
+y **summarise()** para generar la tabla que contenía estos datos, esto es 
+importante, ya que **geom_col()** devuelve la suma de todos los datos, que 
+corresponden al volumen total anual de cada activo. Para obtener las barras por
+TPDA, utilizamos:
+
+```{r col tpda}
+copexa %>% 
+  mutate(year = format(fecha, format = "%Y")) %>% 
+  group_by(activo, year) %>% 
+  summarise(AUTO = sum(AUTO)/n()) %>% 
+  ggplot(aes(year, AUTO, fill = activo)) +
+  geom_col(position = "dodge")
+```
+
+Por otra parte, existe la geometría **geom_line()**, la cual permite representar,
+por ejemplo, cambios en una variable a lo largo del tiempo. Utilizando la base de 
+datos de COPEXA sin ninguna transformación, podemos obtener la siguiente 
+visualización:
+
+```{r}
+copexa %>% 
+  ggplot(aes(fecha, AUTO)) +
+  geom_line(aes(color = activo)) 
+```
+Dado que tenemos información diaria, el gráfico parece muy saturado, pero podemos
+observar patrones, como por ejemplo la pérdida de volumen en el año 2020 debido a 
+la pandemia por COVID-19. 
+
+Si reducimos todo a TPDA y realizamos el gráfico de líneas, necesitamos especificar
+que la agrupación la queremos representar por activo a través del parámetro 
+**group**.
+
+```{r line group}
+copexa %>% 
+  mutate(year = format(fecha, format = "%Y")) %>% 
+  group_by(activo, year) %>% 
+  summarise(AUTO = sum(AUTO)/n()) %>% 
+  ggplot(aes(year, AUTO)) +
+  geom_line(aes(color = activo, group = activo))
+```
+
+## Temas
+Los temas controlan todos los elementos visuales del gráfico que no están 
+ligados a los datos. Estos elementos se clasifican en tres grupos: texto, 
+línea y rectángulo, y pueden ser modificados utilizando la función adecuada, las
+cuales comparten el prefijo **element_**.
+
+Volviendo a un gráfico que nos quedó decente, podemos modificarlo para mejorar su
+presentación. En este caso mostramos el gráfico de tiempos de calibración. Para este
+ejemplo, mostraremos una modificación en cada grupo de temas para después crear un
+tema completo que podamos añadir a nuestro gráfico.
+
+```{r}
+tiempos_calibracion %>% 
+  ggplot(aes(TPOS_OBS, TPOS_MOD)) +
+  geom_point(aes(color = VEL_19)) +
+  geom_smooth(method = "lm") +
+  theme(axis.text = element_text(color = "dark red"),
+        axis.line = element_line(color = "blue"),
+        panel.background = element_rect(fill = "white"))
+```
+
+Podemos definir un tema y asignarlo a una variable para después aplicarlo a 
+varios gráficos.
+
+```{r tema}
+tema1 <- theme(text = element_text(family = "sans", size = 12),
+               rect = element_blank(),
+               panel.grid = element_blank(),
+               title = element_text(color = "dark blue"),
+               axis.line = element_line(color = "black"))
+
+tiempos_points <- tiempos_calibracion %>% 
+  ggplot(aes(TPOS_OBS, TPOS_MOD)) +
+  geom_point(aes(color = VEL_19)) +
+  geom_smooth(method = "lm") +
+  scale_x_continuous("Tiempos observados (min)", 
+                     limits = c(0,30), 
+                     expand = c(0,0)) +
+  scale_y_continuous("Tiempos modelados (min)", 
+                     limits = c(0,30), 
+                     expand = c(0,0)) 
+  
+
+tiempos_points + tema1
+```
+
+Por último, es importante mencionar que existen temas pre cargados en R, que son
+útiles para realizar gráficos con mejor presentación, pero incluso pueden ser de
+mucha utilidad al realizar análisis previos sobre los datos, ya que permiten 
+modificar de manera rápida los elementos visuales del mismo y en algunos casos 
+remover (o añadir) guías visuales.
+
+```{r themevoid}
+tiempos_points + theme_void()
+tiempos_points + theme_classic()
+tiempos_points + theme_minimal()
+```
+
+# Ejercicios finales
+1. Storytelling: Elegir una base de datos de las tres utilizadas durante el curso
+(censo, copexa y tiempos de calibración) y generar dos gráficos significativos y
+auto-explicativos.
+
+2. Tratar de reproducir el siguiente histograma (extra)
+Pista: revisar función **facet_wrap()**
+
+```{r, echo = FALSE, message = FALSE}
+copexa %>% 
+  mutate(year = format(fecha, format = "%Y")) %>% 
+  group_by(year) %>% 
+  ggplot(aes(AUTO, fill = activo)) +
+  geom_histogram(position = "dodge") +
+  facet_wrap(~year)
+```
+
+
+
+```{r, echo = FALSE, show = FALSE}
+knitr::knit_exit()
+```
+
+
+\newpage
+# Limpieza de datos
+
+\newpage
+# Análisis Exploratorio de datos (EDA)
+
+\newpage
+# Estadística en R
+
+\newpage
+# Modelos de regresión
 ## Regresión lineal simple
 ## Predicciones
 ## Evaluación de modelos
 ## Regresión logística simple
 
-# Análisis espacial (180 min)
+\newpage
+# Análisis espacial
 ## Visualización de datos geoespaciales
 ## Análisis espacial
 ## Estadística espacial
 ## Mapas interactivos con leaflet 
 
-# Geocomputación (180)
+\newpage
+# Geocomputación
 ## Introducción
 ## Zonificación
 ## Lineas de deseo
